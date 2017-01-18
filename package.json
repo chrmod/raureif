@@ -1,0 +1,24 @@
+{
+  "name": "raureif",
+  "version": "1.0.0",
+  "description": "Basic toolset for library authoring",
+  "repository": "https://github.com/chrmod/raureif",
+  "author": "Krzysztof Jan Modras <chrmod@chrmod.net>",
+  "bin": {
+    "raureif": "bin/raureif.js"
+  },
+  "dependencies": {
+    "broccoli": "^1.1.0",
+    "broccoli-babel-transpiler": "^5.6.2",
+    "broccoli-funnel": "^1.1.0",
+    "broccoli-merge-trees": "^1.2.1",
+    "broccoli-slow-trees": "2.0.0",
+    "broccoli-source": "^1.1.0",
+    "commander": "^2.9.0",
+    "copy-dereference": "^1.0.0",
+    "mocha": "^3.2.0",
+    "rimraf": "^2.5.4",
+    "testem": "^1.14.2",
+    "walk": "^2.3.9"
+  }
+}
