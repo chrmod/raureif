@@ -113,12 +113,13 @@ program
     watcher.start();
     testem.startDev({
       launchers: {
-        'Slow trees': {
+        'Node': {
           exe: 'raureif',
-          args: ['runtest']
+          args: ['runtest'],
+          protocol: 'tap',
         },
       },
-      launch: 'Slow trees'
+      launch: 'Node'
     });
   });
 
@@ -129,6 +130,7 @@ program
       ui: 'bdd',
       reporter: 'tap',
     });
+
     const walker = walk.walk('dist');
     walker.on('file', (root, state, next) => {
       const testPath = `${root}/${state.name}`;
