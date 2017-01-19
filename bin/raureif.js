@@ -11,6 +11,7 @@ const path = require('path');
 const rimraf = require('rimraf');
 const Mocha = require('mocha');
 const walk = require('walk');
+const Testem = require('testem');
 
 const copyDereferenceSync = copyDereference.sync;
 const Watcher = broccoli.Watcher;
@@ -102,25 +103,39 @@ program
   .action((args, done) => {
     const { builder, copy } = createBuilder();
     const watcher = createWatcher(builder);
-
-    const Testem = require('testem');
     const testem = new Testem();
+    let running = false;
+
+    watcher.on('buildFailure', function (error) {
+      console.error('raureif error:', error.name)
+      console.error()
+      console.error(error.message)
+      console.error()
+      console.error('raureif error stack strace:')
+      console.error(error.stack)
+    });
+
     watcher.on('buildSuccess', function () {
       rimraf.sync(OUTPUT_PATH);
       copy();
-      testem.restart();
+
+      if (!running) {
+        testem.startDev({
+          launchers: {
+            'Node': {
+              exe: 'raureif',
+              args: ['runtest'],
+              protocol: 'tap',
+            },
+          },
+          launch: 'Node'
+        });
+        running = true;
+      } else {
+        testem.restart();
+      }
     });
     watcher.start();
-    testem.startDev({
-      launchers: {
-        'Node': {
-          exe: 'raureif',
-          args: ['runtest'],
-          protocol: 'tap',
-        },
-      },
-      launch: 'Node'
-    });
   });
 
 program
