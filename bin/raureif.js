@@ -100,10 +100,16 @@ program
 
 program
   .command('test')
-  .action((args, done) => {
+  .option('--ci', 'Continuous Integration mode')
+  .action((args) => {
     const { builder, copy } = createBuilder();
     const watcher = createWatcher(builder);
     const testem = new Testem();
+    const modes = {
+      'dev': 'startDev',
+      'ci': 'startCI',
+    };
+    const testemMode = args.ci ? modes.ci : modes.dev;
     let running = false;
 
     watcher.on('buildFailure', function (error) {
@@ -120,7 +126,7 @@ program
       copy();
 
       if (!running) {
-        testem.startDev({
+        testem[testemMode]({
           launchers: {
             'Node': {
               exe: 'raureif',
