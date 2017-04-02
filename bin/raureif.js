@@ -5,6 +5,8 @@ const broccoli = require('broccoli');
 const MergeTrees = require('broccoli-merge-trees');
 const broccoliSource = require('broccoli-source');
 const babel = require('broccoli-babel-transpiler');
+const babelPreset2015 = require('babel-preset-es2015');
+const watchify = require('broccoli-watchify');
 const printSlowNodes = require('broccoli-slow-trees');
 const copyDereference = require('copy-dereference');
 const path = require('path');
@@ -28,7 +30,24 @@ const createBuildTree = () => {
     sourceTree,
     testsTree,
   ]);
-  return babel(tree);
+  const transpiledTree = babel(tree, {
+    presets: [
+      babelPreset2015,
+    ]
+  });
+  const options = {
+    browserify: {
+      entries: ['./index.js'],
+      paths: [basePath + '/node_modules'],
+      debug: false
+    },
+    outputFile: '/index.browser.js',
+    cache: true,
+  };
+  return new MergeTrees([
+    transpiledTree,
+    watchify(transpiledTree, options),
+  ]);
 };
 
 const createWatcher = (builder) => {
@@ -90,6 +109,7 @@ program
     });
 
     watcher.on('buildFailure', function () {
+      console.error(arguments);
       // TODO
     });
 

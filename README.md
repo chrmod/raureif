@@ -4,6 +4,7 @@ Simple toolset for library authoring.
 
 Provides:
 * source transpilation via Babel
+* builds for browser via browserify
 * unit tests via Mocha
 * cli tools via Commander
 * development and CI workflow via Testem
