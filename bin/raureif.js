@@ -24,6 +24,7 @@ const OUTPUT_PATH = 'dist';
 
 const createBuildTree = () => {
   const basePath = process.cwd();
+  const packageManifest = require(path.join(basePath, 'package.json'));
   const sourceTree = new WatchedDir(path.join(basePath, 'src'));
   const testsTree = new WatchedDir(path.join(basePath, 'tests'));
   const tree = new MergeTrees([
@@ -39,6 +40,7 @@ const createBuildTree = () => {
     browserify: {
       entries: ['./index.js'],
       paths: [basePath + '/node_modules'],
+      standalone: packageManifest.name,
       debug: false
     },
     outputFile: '/index.browser.js',
