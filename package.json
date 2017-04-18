@@ -21,10 +21,10 @@
     "walk": "^2.3.9",
     "babel-preset-es2015": "^6.24.0",
     "broccoli-babel-transpiler": "^6.0.0",
-    "broccoli-watchify": "^1.0.1"
-  },
-  "devDependencies": {
+    "broccoli-watchify": "^1.0.1",
     "babel-plugin-add-module-exports": "^0.2.1",
     "uppercamelcase": "^1.1.0"
+  },
+  "devDependencies": {
   }
 }
