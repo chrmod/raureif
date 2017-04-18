@@ -6,9 +6,11 @@ const MergeTrees = require('broccoli-merge-trees');
 const broccoliSource = require('broccoli-source');
 const babel = require('broccoli-babel-transpiler');
 const babelPreset2015 = require('babel-preset-es2015');
+const babelPluginAddModleExports = require('babel-plugin-add-module-exports');
 const watchify = require('broccoli-watchify');
 const printSlowNodes = require('broccoli-slow-trees');
 const copyDereference = require('copy-dereference');
+const uppercamelcase = require('uppercamelcase');
 const path = require('path');
 const rimraf = require('rimraf');
 const Mocha = require('mocha');
@@ -32,6 +34,9 @@ const createBuildTree = () => {
     testsTree,
   ]);
   const transpiledTree = babel(tree, {
+    plugins: [
+      babelPluginAddModleExports,
+    ],
     presets: [
       babelPreset2015,
     ]
@@ -40,7 +45,7 @@ const createBuildTree = () => {
     browserify: {
       entries: ['./index.js'],
       paths: [basePath + '/node_modules'],
-      standalone: packageManifest.name,
+      standalone: uppercamelcase(packageManifest.name),
       debug: false
     },
     outputFile: '/index.browser.js',

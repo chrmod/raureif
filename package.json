@@ -1,6 +1,6 @@
 {
   "name": "raureif",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Basic toolset for library authoring",
   "repository": "https://github.com/chrmod/raureif",
   "author": "Krzysztof Jan Modras <chrmod@chrmod.net>",
@@ -24,5 +24,7 @@
     "broccoli-watchify": "^1.0.1"
   },
   "devDependencies": {
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "uppercamelcase": "^1.1.0"
   }
 }
