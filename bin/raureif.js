@@ -3,59 +3,20 @@
 const program = require('commander');
 const broccoli = require('broccoli');
 const MergeTrees = require('broccoli-merge-trees');
-const broccoliSource = require('broccoli-source');
-const babel = require('broccoli-babel-transpiler');
-const babelPreset2015 = require('babel-preset-es2015');
-const babelPluginAddModleExports = require('babel-plugin-add-module-exports');
-const watchify = require('broccoli-watchify');
 const printSlowNodes = require('broccoli-slow-trees');
 const copyDereference = require('copy-dereference');
-const uppercamelcase = require('uppercamelcase');
-const path = require('path');
 const rimraf = require('rimraf');
 const Mocha = require('mocha');
 const walk = require('walk');
 const Testem = require('testem');
 
+const createBuildTree = require('../src/build-tree');
+
 const copyDereferenceSync = copyDereference.sync;
 const Watcher = broccoli.Watcher;
 const Builder = broccoli.Builder;
-const WatchedDir = broccoliSource.WatchedDir;
 
 const OUTPUT_PATH = 'dist';
-
-const createBuildTree = () => {
-  const basePath = process.cwd();
-  const packageManifest = require(path.join(basePath, 'package.json'));
-  const sourceTree = new WatchedDir(path.join(basePath, 'src'));
-  const testsTree = new WatchedDir(path.join(basePath, 'tests'));
-  const tree = new MergeTrees([
-    sourceTree,
-    testsTree,
-  ]);
-  const transpiledTree = babel(tree, {
-    plugins: [
-      babelPluginAddModleExports,
-    ],
-    presets: [
-      babelPreset2015,
-    ]
-  });
-  const options = {
-    browserify: {
-      entries: ['./index.js'],
-      paths: [basePath + '/node_modules'],
-      standalone: uppercamelcase(packageManifest.name),
-      debug: false
-    },
-    outputFile: '/index.browser.js',
-    cache: true,
-  };
-  return new MergeTrees([
-    transpiledTree,
-    watchify(transpiledTree, options),
-  ]);
-};
 
 const createWatcher = (builder) => {
   const watcher = new Watcher(builder);
