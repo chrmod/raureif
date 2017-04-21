@@ -1,50 +1,15 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const broccoli = require('broccoli');
-const MergeTrees = require('broccoli-merge-trees');
 const printSlowNodes = require('broccoli-slow-trees');
-const copyDereference = require('copy-dereference');
 const rimraf = require('rimraf');
 const Mocha = require('mocha');
 const walk = require('walk');
 const Testem = require('testem');
 
-const createBuildTree = require('../src/build-tree');
-
-const copyDereferenceSync = copyDereference.sync;
-const Watcher = broccoli.Watcher;
-const Builder = broccoli.Builder;
+const { createWatcher, createBuilder } = require('../src/build-tree');
 
 const OUTPUT_PATH = 'dist';
-
-const createWatcher = (builder) => {
-  const watcher = new Watcher(builder);
-
-  return {
-    start() {
-      return watcher.start();
-    },
-    on(eventName, cb) {
-      watcher.on(eventName, cb);
-    },
-  }
-};
-
-const createBuilder = () => {
-  const tree = createBuildTree();
-  const builder = new Builder(tree);
-
-  return {
-    builder,
-    copy() {
-      copyDereferenceSync(builder.outputPath, OUTPUT_PATH)
-    },
-    cleanup() {
-      builder.cleanup()
-    },
-  };
-};
 
 program
   .command('build')
