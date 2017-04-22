@@ -100,20 +100,25 @@ program
 program
   .command('runtest')
   .action(function (args, done) {
-    const mocha = new Mocha({
-      ui: 'bdd',
-      reporter: 'tap',
+    return new Promise(resolve => {
+      const paths = [];
+      const walker = walk.walk('dist');
+      walker.on('file', (root, state, next) => {
+        const path = `${root}/${state.name}`;
+        if (state.name.endsWith('-test.js')) {
+          paths.push(path);
+        }
+        next();
+      });
+      walker.on('end', () => resolve(paths));
+    }).then(testPaths => {
+      const mocha = new Mocha({
+        ui: 'bdd',
+        reporter: 'tap',
+      });
+      testPaths.forEach(mocha.addFile.bind(mocha));
+      mocha.run()
     });
-
-    const walker = walk.walk('dist');
-    walker.on('file', (root, state, next) => {
-      const testPath = `${root}/${state.name}`;
-      if (state.name.endsWith('-test.js')) {
-        mocha.addFile(testPath);
-      }
-      next();
-    });
-    walker.on('end', function () { mocha.run(); });
   });
 
 program.parse(process.argv);
