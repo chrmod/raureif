@@ -3,11 +3,10 @@
 const program = require('commander');
 const printSlowNodes = require('broccoli-slow-trees');
 const rimraf = require('rimraf');
-const Mocha = require('mocha');
-const walk = require('walk');
 const Testem = require('testem');
 
 const { createWatcher, createBuilder } = require('../src/build-tree');
+const runtest = require('../src/commands/runtest');
 
 const OUTPUT_PATH = 'dist';
 
@@ -100,25 +99,7 @@ program
 program
   .command('runtest')
   .action(function (args, done) {
-    return new Promise(resolve => {
-      const paths = [];
-      const walker = walk.walk('dist');
-      walker.on('file', (root, state, next) => {
-        const path = `${root}/${state.name}`;
-        if (state.name.endsWith('-test.js')) {
-          paths.push(path);
-        }
-        next();
-      });
-      walker.on('end', () => resolve(paths));
-    }).then(testPaths => {
-      const mocha = new Mocha({
-        ui: 'bdd',
-        reporter: 'tap',
-      });
-      testPaths.forEach(mocha.addFile.bind(mocha));
-      mocha.run()
-    });
+    runtest();
   });
 
 program.parse(process.argv);
