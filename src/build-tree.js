@@ -6,6 +6,7 @@ const MergeTrees = require('broccoli-merge-trees');
 const babel = require('broccoli-babel-transpiler');
 const babelPreset2015 = require('babel-preset-es2015');
 const watchify = require('broccoli-watchify');
+const Funnel = require('broccoli-funnel');
 const babelPluginAddModleExports = require('babel-plugin-add-module-exports');
 const uppercamelcase = require('uppercamelcase');
 
@@ -20,10 +21,12 @@ const createBuildTree = () => {
   const basePath = process.cwd();
   const packageManifest = require(path.join(basePath, 'package.json'));
   const sourceTree = new WatchedDir(path.join(basePath, 'src'));
-  const testsTree = new WatchedDir(path.join(basePath, 'tests'));
+  const nodeTestsTree = new WatchedDir(path.join(basePath, 'tests', 'node'));
+  const browserTestsTree = new WatchedDir(path.join(basePath, 'tests', 'browser'));
   const tree = new MergeTrees([
     sourceTree,
-    testsTree,
+    new Funnel(nodeTestsTree, { destDir: 'node' }),
+    new Funnel(browserTestsTree, { destDir: 'browser' }),
   ]);
   const transpiledTree = babel(tree, {
     plugins: [
@@ -33,19 +36,22 @@ const createBuildTree = () => {
       babelPreset2015,
     ]
   });
-  const options = {
-    browserify: {
-      entries: ['./index.js'],
-      paths: [basePath + '/node_modules'],
-      standalone: uppercamelcase(packageManifest.name),
-      debug: false
-    },
-    outputFile: '/index.browser.js',
-    cache: true,
+  const getOptions = function(entryPoint) {
+    return {
+      browserify: {
+        entries: ['./'+entryPoint+'.js'],
+        paths: [basePath + '/node_modules'],
+        standalone: uppercamelcase(packageManifest.name),
+        debug: false
+      },
+      outputFile: '/'+entryPoint+'.browser.js',
+      cache: true,
+    };
   };
   return new MergeTrees([
     transpiledTree,
-    watchify(transpiledTree, options),
+    watchify(transpiledTree, getOptions('index')),
+    watchify(transpiledTree, getOptions('browser/index')),
   ]);
 };
 

@@ -79,6 +79,10 @@ program
 
       if (!running) {
         testem[testemMode]({
+          framework: 'mocha',
+          src_files: [
+            "dist/browser/index.browser.js"
+          ],
           launchers: {
             'Node': {
               exe: 'raureif',
@@ -86,7 +90,7 @@ program
               protocol: 'tap',
             },
           },
-          launch: 'Node'
+          launch: 'Node,firefox'
         });
         running = true;
       } else {
