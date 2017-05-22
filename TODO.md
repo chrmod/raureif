@@ -1,2 +1,7 @@
 * show error message when testem cannot start due to port already taken
-* do not start tests if require files are missing
+* commands description with params
+* dependency management (wrapper for yarn)
+* publishing (wrapper for npm publish)
+* project bootstrapping (simple templates)
+** .gitignore
+* tests in CI (travis.yml)

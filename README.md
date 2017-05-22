@@ -1,20 +1,15 @@
 # raureif
 
-Simple toolset for library authoring.
+Simple toolset for javascript library authoring.
 
-Provides:
-* source transpilation via Babel
-* builds for browser via browserify
-* unit tests via Mocha
-* cli tools via Commander
-* development and CI workflow via Testem
+## Usage
 
-## TODO
+Installation:
+```
+npm install raureif --save-dev
+```
 
-* complete readme for all commands
-* commands description with params
-* dependency management (wrapper for yarn)
-* publishing (wrapper for npm publish)
-* project bootstrapping (simple templates)
-** .gitignore
-* tests in CI (travis.yml)
+To get basic usage help type:
+```
+raureif --help
+```

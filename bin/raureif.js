@@ -12,6 +12,7 @@ const OUTPUT_PATH = 'dist';
 
 program
   .command('build')
+  .description('builds the project into \'dist\' directory')
   .action(() => {
     const { builder, copy } = createBuilder();
 
@@ -20,14 +21,15 @@ program
     builder.build().then(() => {
       return copy();
     }).then(() => {
-      console.log("Build successful");
+      console.log('Build successful');
     }).catch(error => {
-      console.error("Something went wrong", error);
+      console.error('Something went wrong', error);
     });
   });
 
 program
   .command('serve')
+  .description('starts building server that watches src file changes')
   .action(() => {
     const { builder, copy } = createBuilder();
     const watcher = createWatcher(builder);
@@ -46,15 +48,16 @@ program
     });
 
     watcher.start().catch((error) => {
-      console.log("Something went wrong", error);
+      console.log('Something went wrong', error);
     });
   });
 
 program
   .command('test')
+  .description('run tests with live reloading server')
   .option('--ci', 'Continuous Integration mode')
   .action((args) => {
-    const { builder, copy } = createBuilder();
+    const { builder, copy, hasBrowserTests } = createBuilder();
     const watcher = createWatcher(builder);
     const testem = new Testem();
     const modes = {
@@ -62,7 +65,12 @@ program
       'ci': 'startCI',
     };
     const testemMode = args.ci ? modes.ci : modes.dev;
+    const launchers = ['Node'];
     let running = false;
+
+    if (hasBrowserTests()) {
+      launchers.push('firefox');
+    }
 
     watcher.on('buildFailure', function (error) {
       console.error('raureif error:', error.name)
@@ -81,7 +89,7 @@ program
         testem[testemMode]({
           framework: 'mocha',
           src_files: [
-            "dist/browser/index.browser.js"
+            'dist/browser/index.browser.js'
           ],
           launchers: {
             'Node': {
@@ -90,7 +98,7 @@ program
               protocol: 'tap',
             },
           },
-          launch: 'Node,firefox'
+          launch: launchers.join(',')
         });
         running = true;
       } else {
@@ -102,6 +110,7 @@ program
 
 program
   .command('runtest')
+  .description('run unit tests once')
   .action(function (args, done) {
     runtest();
   });

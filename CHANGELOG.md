@@ -1,5 +1,9 @@
 # Raureif Changelog
 
+## 1.2.0
+
+* browser tests
+
 ## 1.1.3
 
 * exporting only the default export with PascalCase name
