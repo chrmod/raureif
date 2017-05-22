@@ -4,6 +4,7 @@ const program = require('commander');
 const printSlowNodes = require('broccoli-slow-trees');
 const rimraf = require('rimraf');
 const Testem = require('testem');
+const path = require('path');
 
 const { createWatcher, createBuilder } = require('../src/build-tree');
 const runtest = require('../src/commands/runtest');
@@ -93,8 +94,17 @@ program
           ],
           launchers: {
             'Node': {
-              exe: 'raureif',
-              args: ['runtest'],
+              exe: 'node',
+              args: [
+                path.join(
+                  process.cwd(),
+                  'node_modules',
+                  'raureif',
+                  'src',
+                  'commands',
+                  'runtest'
+                )
+              ],
               protocol: 'tap',
             },
           },
@@ -106,13 +116,6 @@ program
       }
     });
     watcher.start();
-  });
-
-program
-  .command('runtest')
-  .description('run unit tests once')
-  .action(function (args, done) {
-    runtest();
   });
 
 program.parse(process.argv);
