@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const program = require('commander');
 const printSlowNodes = require('broccoli-slow-trees');
 const rimraf = require('rimraf');
@@ -7,7 +5,6 @@ const Testem = require('testem');
 const path = require('path');
 
 const { createWatcher, createBuilder } = require('../src/build-tree');
-const runtest = require('../src/commands/runtest');
 
 const OUTPUT_PATH = 'dist';
 
@@ -118,4 +115,4 @@ program
     watcher.start();
   });
 
-program.parse(process.argv);
+module.exports = (args) => program.parse(args);
