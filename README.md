@@ -4,9 +4,7 @@ Simple toolset for javascript library authoring.
 
 ## Usage
 
-Installation:
-
-To get `raureif` in the PATH, install it locally:
+To get `raureif` in the PATH, install it globally:
 ```
 npm install raureif -g
 ```
