@@ -22,3 +22,7 @@ raureif --help
 To start, create `src/index.js` and run `raureif build`. The output files
 for npm will be located in `dist/index.js` and in `dist/index.browser.js` for
 the browser respectively.
+
+## Examples
+
+* [spanan](https://github.com/chrmod/spanan) - postMessage wrapper
