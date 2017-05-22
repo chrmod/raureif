@@ -1,5 +1,9 @@
 # Raureif Changelog
 
+## 1.3.0
+
+* global installation to enable normal cli interaction
+
 ## 1.2.0
 
 * browser tests
