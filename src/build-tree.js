@@ -1,23 +1,22 @@
-const path = require('path');
-const fs = require('fs');
-const uppercamelcase = require('uppercamelcase');
+const Funnel = require('broccoli-funnel');
+const MergeTrees = require('broccoli-merge-trees');
+const babel = require('broccoli-babel-transpiler');
+const babelPluginAddModleExports = require('babel-plugin-add-module-exports');
+const babelPreset2015 = require('babel-preset-es2015');
 const broccoli = require('broccoli');
 const broccoliSource = require('broccoli-source');
 const copyDereference = require('copy-dereference');
-const MergeTrees = require('broccoli-merge-trees');
-const babel = require('broccoli-babel-transpiler');
-const babelPreset2015 = require('babel-preset-es2015');
+const fs = require('fs');
+const path = require('path');
+const uppercamelcase = require('uppercamelcase');
 const watchify = require('broccoli-watchify');
-const Funnel = require('broccoli-funnel');
-const babelPluginAddModleExports = require('babel-plugin-add-module-exports');
 
-const copyDereferenceSync = copyDereference.sync;
+const Builder = broccoli.Builder;
+const OUTPUT_PATH = 'dist';
 const WatchedDir = broccoliSource.WatchedDir;
 const Watcher = broccoli.Watcher;
-const Builder = broccoli.Builder;
-
-const OUTPUT_PATH = 'dist';
 const basePath = process.cwd();
+const copyDereferenceSync = copyDereference.sync;
 
 const hasBrowserTests = () => {
   return fs.existsSync(path.join(basePath, 'tests', 'browser'));
