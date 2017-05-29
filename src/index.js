@@ -98,7 +98,6 @@ program
                   'node_modules',
                   'raureif',
                   'src',
-                  'commands',
                   'runtest'
                 )
               ],
