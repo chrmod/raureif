@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict'
+'use strict';
 
 const resolve = require('resolve');
 
@@ -7,8 +7,14 @@ resolve('raureif', {
   basedir: process.cwd()
 }, function(error, projectLocalCli) {
   if (error) {
-    console.log('only global installation of raureif found');
-    console.log('run `npm install raureif --save-dev` to install raureif locally');
+    if (process.argv[2] === 'new') {
+      // get global raureif
+      const cli = require('..');
+      cli(process.argv);
+    } else {
+      console.log('only global installation of raureif found');
+      console.log('run `npm install raureif --save-dev` to install raureif locally');
+    }
   } else {
     const cli = require(projectLocalCli);
     cli(process.argv);

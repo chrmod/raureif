@@ -1,12 +1,22 @@
+'use strict';
 const program = require('commander');
 const printSlowNodes = require('broccoli-slow-trees');
 const rimraf = require('rimraf');
 const Testem = require('testem');
 const path = require('path');
 
+const ProjectBlueprint = require('./project-blueprint');
 const { createWatcher, createBuilder } = require('../src/build-tree');
 
 const OUTPUT_PATH = 'dist';
+
+program
+  .command('new <projectName>')
+  .description('creates new project')
+  .action((dir) => {
+    const blueprint = new ProjectBlueprint(dir);
+    blueprint.create();
+  });
 
 program
   .command('build')
