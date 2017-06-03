@@ -4,6 +4,8 @@ const printSlowNodes = require('broccoli-slow-trees');
 const rimraf = require('rimraf');
 const Testem = require('testem');
 const path = require('path');
+const execa = require('execa');
+const Spinner = require('cli-spinner').Spinner;
 
 const ProjectBlueprint = require('./project-blueprint');
 const { createWatcher, createBuilder } = require('../src/build-tree');
@@ -14,8 +16,27 @@ program
   .command('new <projectName>')
   .description('creates new project')
   .action((dir) => {
+    const projectPath = path.join(
+      process.cwd(),
+      dir
+    );
     const blueprint = new ProjectBlueprint(dir);
-    blueprint.create();
+    const spinner = new Spinner('processing.. %s');
+    spinner.setSpinnerString('|/-\\');
+
+    blueprint.create().then((result) => {
+      return execa('npm', ['init', '-y'], {
+        cwd: projectPath,
+      });
+    }).then((result) => {
+      console.log(result.stdout);
+      spinner.start();
+      return execa('npm', ['install', 'raureif', '--save-dev'], {
+        cwd: projectPath,
+      });
+    }).then((result) => {
+      spinner.stop(true);
+    }).catch(console.error);
   });
 
 program

@@ -57,7 +57,7 @@ const createBuildTree = () => {
 
   if (hasBrowserTests()) {
     outputTrees.push(
-      watchify(transpiledTree, getOptions('browser/index'))
+      watchify(transpiledTree, getOptions('browser/index-test'))
     );
   }
   return new MergeTrees(outputTrees);

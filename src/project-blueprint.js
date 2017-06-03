@@ -18,17 +18,16 @@ module.exports = class {
     );
     const destPath = this.projectName;
 
-    copy(srcPath, destPath)
+    return copy(srcPath, destPath)
       .then(function(results) {
         console.info('Copied ' + results.length + ' files');
       })
       .catch(function(error) {
         console.error('Copy failed: ' + error);
+        throw error;
       });
 
     // TODO:
-    // * yarn init
-    // * yarn install
     // * git init
   }
 }
