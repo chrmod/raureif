@@ -1,5 +1,10 @@
 # Raureif Changelog
 
+## 1.3.1
+
+* project generator with `raureif new <project name>`
+* browser test in multiple files
+
 ## 1.3.0
 
 * global installation to enable normal cli interaction

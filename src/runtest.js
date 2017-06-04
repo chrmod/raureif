@@ -1,21 +1,8 @@
 const Mocha = require('mocha');
-const walk = require('walk');
+const glob = require('glob');
 
 const getPaths = () => {
-  const paths = [];
-  const options = {
-    listeners: {
-      file(root, state, next) {
-        const path = `${root}/${state.name}`;
-        if (state.name.endsWith('-test.js')) {
-          paths.push(path);
-        }
-        next();
-      }
-    }
-  };
-  const walker = walk.walkSync('dist', options);
-  return paths;
+  return glob.sync('dist/node/**/*-test.js');
 };
 
 const run = () => {

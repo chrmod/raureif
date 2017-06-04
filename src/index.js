@@ -118,7 +118,7 @@ program
         testem[testemMode]({
           framework: 'mocha',
           src_files: [
-            'dist/browser/index.browser.js'
+            'dist/tests.browser.js'
           ],
           launchers: {
             'Node': {

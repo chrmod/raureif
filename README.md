@@ -5,23 +5,54 @@ Simple toolset for javascript library authoring.
 ## Usage
 
 To get `raureif` in the PATH, install it globally:
+
 ```
 npm install raureif -g
 ```
 
-And then, in the project:
+### Create new project
+
+Raureif comes with project generator:
+
+```
+raureif new <project name>
+```
+
+### Existing project
+
+Install raureif
+
 ```
 npm install raureif --save-dev
 ```
 
+### Basic operations
+
 To get basic usage help type:
+
 ```
 raureif --help
 ```
 
-To start, create `src/index.js` and run `raureif build`. The output files
-for npm will be located in `dist/index.js` and in `dist/index.browser.js` for
-the browser respectively.
+Currently raureif supports:
+
+* build - to compile project into `dist` directory
+* serve - like build, but with live reloading
+* test - live reloading that runs tests
+
+## Project testing
+
+By default raureif comes with two testing environments, node and the browser.
+Both of them are run on top of `testem` and `mocha`.
+
+To create tests add a file into either `tests/node` or `tests/browser` folder.
+The file name has to end with `-test.js`.
+
+To start tests run
+
+```
+raureif test
+```
 
 ## Examples
 

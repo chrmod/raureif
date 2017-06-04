@@ -10,6 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const uppercamelcase = require('uppercamelcase');
 const watchify = require('broccoli-watchify');
+const glob = require('glob');
 
 const Builder = broccoli.Builder;
 const OUTPUT_PATH = 'dist';
@@ -56,8 +57,20 @@ const createBuildTree = () => {
   ];
 
   if (hasBrowserTests()) {
+    const testFiles = glob.sync(
+      basePath +  '/tests/browser/**/*-test.js'
+    ).map(filePath => '.' + filePath.slice(basePath.length + 6));
     outputTrees.push(
-      watchify(transpiledTree, getOptions('browser/index-test'))
+      watchify(transpiledTree, {
+        browserify: {
+          entries: testFiles,
+          paths: [basePath + '/node_modules'],
+          standalone: uppercamelcase(packageManifest.name),
+          debug: false
+        },
+        outputFile: '/tests.browser.js',
+        cache: true,
+      })
     );
   }
   return new MergeTrees(outputTrees);
