@@ -128,7 +128,7 @@ program
                   process.cwd(),
                   'node_modules',
                   'raureif',
-                  'src',
+                  'dist',
                   'runtest'
                 )
               ],

@@ -1,11 +1,11 @@
-const Mocha = require('mocha');
-const glob = require('glob');
+import Mocha from 'mocha';
+import glob from 'glob';
 
 const getPaths = () => {
   return glob.sync('dist/node/**/*-test.js');
 };
 
-const run = () => {
+export default function run() {
   const testPaths = getPaths();
   const mocha = new Mocha({
     ui: 'bdd',
@@ -14,8 +14,6 @@ const run = () => {
   testPaths.forEach(mocha.addFile.bind(mocha));
   mocha.run()
 };
-
-module.exports = run;
 
 if (require.main === module) {
   run();
