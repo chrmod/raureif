@@ -1,9 +1,7 @@
-'use strict';
+import copy from 'recursive-copy';
+import path from 'path';
 
-const copy = require('recursive-copy');
-const path = require('path');
-
-module.exports = class {
+export default class {
   constructor(projectName) {
     this.projectName = projectName;
   }

@@ -1,5 +1,9 @@
 # Raureif Changelog
 
+## 1.4.0
+
+* raureif builds itself
+
 ## 1.3.1
 
 * project generator with `raureif new <project name>`

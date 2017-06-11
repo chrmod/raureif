@@ -1,16 +1,16 @@
-const Funnel = require('broccoli-funnel');
-const MergeTrees = require('broccoli-merge-trees');
-const babel = require('broccoli-babel-transpiler');
-const babelPluginAddModleExports = require('babel-plugin-add-module-exports');
-const babelPreset2015 = require('babel-preset-es2015');
-const broccoli = require('broccoli');
-const broccoliSource = require('broccoli-source');
-const copyDereference = require('copy-dereference');
-const fs = require('fs');
-const path = require('path');
-const uppercamelcase = require('uppercamelcase');
-const watchify = require('broccoli-watchify');
-const glob = require('glob');
+import Funnel from 'broccoli-funnel';
+import MergeTrees from 'broccoli-merge-trees';
+import babel from 'broccoli-babel-transpiler';
+import babelPluginAddModleExports from 'babel-plugin-add-module-exports';
+import babelPreset2015 from 'babel-preset-es2015';
+import broccoli from 'broccoli';
+import broccoliSource from 'broccoli-source';
+import copyDereference from 'copy-dereference';
+import fs from 'fs';
+import path from 'path';
+import uppercamelcase from 'uppercamelcase';
+import watchify from 'broccoli-watchify';
+import glob from 'glob';
 
 const Builder = broccoli.Builder;
 const OUTPUT_PATH = 'dist';
@@ -19,8 +19,12 @@ const Watcher = broccoli.Watcher;
 const basePath = process.cwd();
 const copyDereferenceSync = copyDereference.sync;
 
+const buildForBrowser = () => {
+  return !!require(path.join(basePath, 'package.json')).browser;
+}
+
 const hasBrowserTests = () => {
-  return fs.existsSync(path.join(basePath, 'tests', 'browser'));
+  return buildForBrowser() && fs.existsSync(path.join(basePath, 'tests', 'browser'));
 };
 
 const createBuildTree = () => {
@@ -51,12 +55,14 @@ const createBuildTree = () => {
       cache: true,
     };
   };
-  outputTrees = [
+  const outputTrees = [
     transpiledTree,
-    watchify(transpiledTree, getOptions('index')),
   ];
 
-  if (hasBrowserTests()) {
+  if (buildForBrowser()) {
+    outputTrees.push(
+      watchify(transpiledTree, getOptions('index'))
+    );
     const testFiles = glob.sync(
       basePath +  '/tests/browser/**/*-test.js'
     ).map(filePath => '.' + filePath.slice(basePath.length + 6));
@@ -105,7 +111,7 @@ const createBuilder = () => {
   };
 };
 
-module.exports = {
+export default {
   createWatcher,
   createBuilder,
 };

@@ -1,15 +1,15 @@
-'use strict';
-const program = require('commander');
-const printSlowNodes = require('broccoli-slow-trees');
-const rimraf = require('rimraf');
-const Testem = require('testem');
-const path = require('path');
-const execa = require('execa');
-const Spinner = require('cli-spinner').Spinner;
+import program from 'commander';
+import printSlowNodes from 'broccoli-slow-trees';
+import rimraf from 'rimraf';
+import Testem from 'testem';
+import path from 'path';
+import execa from 'execa';
+import CliSpinner from 'cli-spinner';
 
-const ProjectBlueprint = require('./project-blueprint');
-const { createWatcher, createBuilder } = require('../src/build-tree');
+import ProjectBlueprint from './project-blueprint';
+import { createWatcher, createBuilder } from './build-tree';
 
+const Spinner = CliSpinner.Spinner;
 const OUTPUT_PATH = 'dist';
 
 program
@@ -145,4 +145,6 @@ program
     watcher.start();
   });
 
-module.exports = (args) => program.parse(args);
+export default function (args) {
+  program.parse(args);
+}
