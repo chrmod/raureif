@@ -1,5 +1,10 @@
 # Raureif Changelog
 
+## 1.5.0
+
+* PhantomJS run tests in CI
+* babel-polyfill shipped in dist (to be used by PhantomJS)
+
 ## 1.4.0
 
 * raureif builds itself

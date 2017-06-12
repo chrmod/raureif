@@ -98,7 +98,11 @@ program
     let running = false;
 
     if (hasBrowserTests()) {
-      launchers.push('firefox');
+      if (args.ci) {
+        launchers.push('PhantomJS');
+      } else {
+        launchers.push('firefox');
+      }
     }
 
     watcher.on('buildFailure', function (error) {
@@ -118,6 +122,7 @@ program
         testem[testemMode]({
           framework: 'mocha',
           src_files: [
+            'dist/polyfill.js',
             'dist/tests.browser.js'
           ],
           launchers: {

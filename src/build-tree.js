@@ -41,7 +41,8 @@ const createBuildTree = () => {
     ],
     presets: [
       babelPreset2015,
-    ]
+    ],
+    browserPolyfill: true,
   });
   const getOptions = function(entryPoint) {
     return {
