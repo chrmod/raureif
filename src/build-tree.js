@@ -3,6 +3,7 @@ import MergeTrees from 'broccoli-merge-trees';
 import babel from 'broccoli-babel-transpiler';
 import babelPluginAddModleExports from 'babel-plugin-add-module-exports';
 import babelPreset2015 from 'babel-preset-es2015';
+import eslint from 'broccoli-lint-eslint';
 import broccoli from 'broccoli';
 import broccoliSource from 'broccoli-source';
 import copyDereference from 'copy-dereference';
@@ -27,12 +28,20 @@ const hasBrowserTests = () => {
   return buildForBrowser() && fs.existsSync(path.join(basePath, 'tests', 'browser'));
 };
 
+const lint = (tree) => eslint(tree, {
+  options: {
+    baseConfig: {
+      extends: 'airbnb',
+    },
+  }
+});
+
 const createBuildTree = () => {
   const packageManifest = require(path.join(basePath, 'package.json'));
   const sourceTree = new WatchedDir(path.join(basePath, 'src'));
   const testsTree = new WatchedDir(path.join(basePath, 'tests'));
   const tree = new MergeTrees([
-    sourceTree,
+    lint(sourceTree),
     testsTree,
   ]);
   const transpiledTree = babel(tree, {
