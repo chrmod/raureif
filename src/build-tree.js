@@ -122,6 +122,5 @@ const createBuilder = () => {
 };
 
 export default {
-  createWatcher,
   createBuilder,
 };

@@ -4,10 +4,11 @@ import rimraf from 'rimraf';
 import Testem from 'testem';
 import path from 'path';
 import execa from 'execa';
+import { server as BroccoliServer, Watcher } from 'broccoli';
 import CliSpinner from 'cli-spinner';
 
 import ProjectBlueprint from './project-blueprint';
-import { createWatcher, createBuilder } from './build-tree';
+import { createBuilder } from './build-tree';
 
 const Spinner = CliSpinner.Spinner;
 const OUTPUT_PATH = 'dist';
@@ -61,24 +62,14 @@ program
   .description('starts building server that watches src file changes')
   .action(() => {
     const { builder, copy } = createBuilder();
-    const watcher = createWatcher(builder);
+    const watcher = new Watcher(builder);
 
     watcher.on('buildSuccess', function () {
-      console.log('update', builder.outputNodeWrapper.buildState.totalTime)
-
-      printSlowNodes(builder.outputNodeWrapper);
       rimraf.sync(OUTPUT_PATH);
       copy();
     });
 
-    watcher.on('buildFailure', function () {
-      console.error(arguments);
-      // TODO
-    });
-
-    watcher.start().catch((error) => {
-      console.log('Something went wrong', error);
-    });
+    const server = BroccoliServer.serve(watcher, 'localhost', 3000);
   });
 
 program
@@ -87,7 +78,7 @@ program
   .option('--ci', 'Continuous Integration mode')
   .action((args) => {
     const { builder, copy, hasBrowserTests } = createBuilder();
-    const watcher = createWatcher(builder);
+    const watcher = new Watcher(builder);
     const testem = new Testem();
     const modes = {
       'dev': 'startDev',

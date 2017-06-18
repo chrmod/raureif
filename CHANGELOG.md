@@ -1,5 +1,9 @@
 # Raureif Changelog
 
+## 1.6.0
+
+* http server in serve mode
+
 ## 1.5.0
 
 * PhantomJS run tests in CI
