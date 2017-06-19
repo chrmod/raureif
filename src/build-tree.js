@@ -36,7 +36,7 @@ const lint = (tree) => eslint(tree, {
   }
 });
 
-const createBuildTree = () => {
+const createBuildTree = (project) => {
   const packageManifest = require(path.join(basePath, 'package.json'));
   const sourceTree = new WatchedDir(path.join(basePath, 'src'));
   const testsTree = new WatchedDir(path.join(basePath, 'tests'));
@@ -44,7 +44,11 @@ const createBuildTree = () => {
     lint(sourceTree),
     testsTree,
   ]);
-  const transpiledTree = babel(tree, {
+  const addonTrees = project.addons.map(addon => {
+    return addon.build(sourceTree);
+  });
+
+  let transpiledTree = babel(tree, {
     plugins: [
       babelPluginAddModleExports,
     ],
@@ -53,6 +57,12 @@ const createBuildTree = () => {
     ],
     browserPolyfill: true,
   });
+
+  transpiledTree = new MergeTrees([
+    transpiledTree,
+    ...addonTrees,
+  ], { overwrite: true });
+
   const getOptions = function(entryPoint) {
     return {
       browserify: {
@@ -105,8 +115,8 @@ const createWatcher = (builder) => {
   }
 };
 
-const createBuilder = () => {
-  const tree = createBuildTree();
+export function createBuilder(project) {
+  const tree = createBuildTree(project);
   const builder = new Builder(tree);
 
   return {
@@ -119,8 +129,4 @@ const createBuilder = () => {
       builder.cleanup()
     },
   };
-};
-
-export default {
-  createBuilder,
 };

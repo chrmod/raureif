@@ -7,11 +7,13 @@ import execa from 'execa';
 import { server as BroccoliServer, Watcher } from 'broccoli';
 import CliSpinner from 'cli-spinner';
 
+import Project from './project';
 import ProjectBlueprint from './project-blueprint';
 import { createBuilder } from './build-tree';
 
 const Spinner = CliSpinner.Spinner;
 const OUTPUT_PATH = 'dist';
+const project = new Project();
 
 program
   .command('new <projectName>')
@@ -44,7 +46,7 @@ program
   .command('build')
   .description('builds the project into \'dist\' directory')
   .action(() => {
-    const { builder, copy } = createBuilder();
+    const { builder, copy } = createBuilder(project);
 
     rimraf.sync(OUTPUT_PATH);
 
@@ -61,7 +63,7 @@ program
   .command('serve')
   .description('starts building server that watches src file changes')
   .action(() => {
-    const { builder, copy } = createBuilder();
+    const { builder, copy } = createBuilder(project);
     const watcher = new Watcher(builder);
 
     watcher.on('buildSuccess', function () {
@@ -77,7 +79,7 @@ program
   .description('run tests with live reloading server')
   .option('--ci', 'Continuous Integration mode')
   .action((args) => {
-    const { builder, copy, hasBrowserTests } = createBuilder();
+    const { builder, copy, hasBrowserTests } = createBuilder(project);
     const watcher = new Watcher(builder);
     const testem = new Testem();
     const modes = {
@@ -139,6 +141,14 @@ program
       }
     });
     watcher.start();
+  });
+
+program
+  .command('info')
+  .description('run tests with live reloading server')
+  .action(() => {
+    console.log('Project path:', project.path);
+    console.log('Addons:', project.addons.map(a => a.pkg.name));
   });
 
 export default function (args) {

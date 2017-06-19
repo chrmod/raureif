@@ -3,6 +3,7 @@
 ## 1.6.0
 
 * http server in serve mode
+* simple addons system
 
 ## 1.5.0
 
