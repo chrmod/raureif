@@ -48,7 +48,11 @@ const createBuildTree = (project) => {
     return addon.build(sourceTree);
   });
 
-  let transpiledTree = babel(tree, {
+  const treeWithoutAddonFolders = new Funnel(tree, {
+    exclude: project.addons.map(a => `${a.folder}/**/*`),
+  });
+
+  let transpiledTree = babel(treeWithoutAddonFolders, {
     plugins: [
       babelPluginAddModleExports,
     ],

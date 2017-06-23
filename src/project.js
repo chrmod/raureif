@@ -6,12 +6,17 @@ class Addon {
   constructor(entryPoint, pkg) {
     this.entryPoint = entryPoint;
     this.pkg = pkg;
+    this._addon = require(this.entryPoint);
   }
 
   build(...args) {
-    const addon = require(this.entryPoint);
+    const addon = this._addon;
     const builder = addon.build || function () {};
     return builder.apply(addon, args);
+  }
+
+  get folder() {
+   return this._addon.folder;
   }
 }
 
