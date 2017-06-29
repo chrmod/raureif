@@ -62,7 +62,8 @@ program
 program
   .command('serve')
   .description('starts building server that watches src file changes')
-  .action(() => {
+  .option('-p, --port', 'http serve port')
+  .action(function (port = 3000) {
     const { builder, copy } = createBuilder(project);
     const watcher = new Watcher(builder);
 
@@ -71,7 +72,7 @@ program
       copy();
     });
 
-    const server = BroccoliServer.serve(watcher, 'localhost', 3000);
+    const server = BroccoliServer.serve(watcher, 'localhost', Number(port));
   });
 
 program
