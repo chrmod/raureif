@@ -1,5 +1,10 @@
 # Raureif Changelog
 
+## 1.7.0
+
+* test: autogenerate linter tests
+* cli: ability to select build server http port
+
 ## 1.6.0
 
 * http server in serve mode
