@@ -29,6 +29,7 @@ const hasBrowserTests = () => {
 };
 
 const lint = (tree) => eslint(tree, {
+  testGenerator: 'mocha',
   options: {
     baseConfig: {
       extends: 'airbnb',
@@ -41,7 +42,11 @@ const createBuildTree = (project) => {
   const sourceTree = new WatchedDir(path.join(basePath, 'src'));
   const testsTree = new WatchedDir(path.join(basePath, 'tests'));
   const tree = new MergeTrees([
-    lint(sourceTree),
+    sourceTree,
+    new Funnel(lint(sourceTree), {
+      includes: ['**/*.lint-test.js'],
+      destDir: 'node',
+    }),
     testsTree,
   ]);
   const addonTrees = project.addons.map(addon => {
