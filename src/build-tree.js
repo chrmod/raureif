@@ -12,6 +12,7 @@ import path from 'path';
 import uppercamelcase from 'uppercamelcase';
 import watchify from 'broccoli-watchify';
 import glob from 'glob';
+import jsesc from 'jsesc';
 
 const Builder = broccoli.Builder;
 const OUTPUT_PATH = 'dist';
@@ -29,6 +30,8 @@ const hasBrowserTests = () => {
 };
 
 const lint = (tree) => eslint(tree, {
+  // TODO: should use 'mocha' - which currently does not print errors due to:
+  //   https://github.com/ember-cli/aot-test-generators/blob/master/src/mocha.ts#L29
   testGenerator: 'mocha',
   options: {
     baseConfig: {

@@ -1,5 +1,8 @@
+import chai from 'chai';
 import Mocha from 'mocha';
 import glob from 'glob';
+
+global.chai = chai;
 
 const getPaths = () => {
   return glob.sync('dist/node/**/*-test.js');

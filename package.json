@@ -25,6 +25,7 @@
     "broccoli-slow-trees": "2.0.0",
     "broccoli-source": "^1.1.0",
     "broccoli-watchify": "^1.0.1",
+    "chai": "^4.0.2",
     "cli-spinner": "^0.2.6",
     "commander": "^2.9.0",
     "copy-dereference": "^1.0.0",
@@ -33,6 +34,7 @@
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-react": "^7.1.0",
     "execa": "^0.6.3",
+    "find-up": "^2.1.0",
     "glob": "^7.1.2",
     "mocha": "^3.2.0",
     "recursive-copy": "^2.0.6",
@@ -40,7 +42,6 @@
     "rimraf": "^2.5.4",
     "testem": "^1.14.2",
     "uppercamelcase": "^1.1.0",
-    "find-up": "^2.1.0",
     "walk": "^2.3.9"
   },
   "devDependencies": {
