@@ -62,8 +62,8 @@ program
 program
   .command('serve')
   .description('starts building server that watches src file changes')
-  .option('-p, --port', 'http serve port')
-  .action(function (port = 3000) {
+  .option('-p, --port <port>', 'http serve port', 3000)
+  .action(function ({ port }) {
     const { builder, copy } = createBuilder(project);
     const watcher = new Watcher(builder);
 
