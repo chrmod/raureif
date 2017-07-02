@@ -4,6 +4,7 @@
 
 * test: autogenerate linter tests
 * cli: ability to select build server http port
+* linter: complete airbnb preset
 
 ## 1.6.0
 

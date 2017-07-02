@@ -34,9 +34,11 @@ const lint = (tree) => eslint(tree, {
   //   https://github.com/ember-cli/aot-test-generators/blob/master/src/mocha.ts#L29
   testGenerator: 'mocha',
   options: {
-    baseConfig: {
-      extends: 'airbnb',
-    },
+    configFile: path.join(
+       __dirname,
+      '..',
+      '.eslintrc.json',
+    ),
   }
 });
 
