@@ -42,7 +42,7 @@ const lint = (tree) => eslint(tree, {
   }
 });
 
-const createBuildTree = (project) => {
+export const createBuildTree = (project) => {
   const packageManifest = require(path.join(basePath, 'package.json'));
   const sourceTree = new WatchedDir(path.join(basePath, 'src'));
   const testsTree = new WatchedDir(path.join(basePath, 'tests'));
