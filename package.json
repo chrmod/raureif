@@ -8,6 +8,9 @@
   "bin": {
     "raureif": "bin/raureif"
   },
+  "scripts": {
+    "test": "raureif test"
+  },
   "main": "dist/index.js",
   "files": [
     ".eslintrc.json",
