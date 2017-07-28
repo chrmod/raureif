@@ -2,7 +2,7 @@
 
 Simple toolset for javascript library authoring.
 It is highly inspired by amazing tools like `ember-cli`, but aims to be
-framework and platform agnostic. So if you plan to release you're library for
+framework and platform agnostic. So if you plan to release your library for
 multiple enviroments (node/browser/iot) - raureif may be a tool for your.
 
 ## Installation
@@ -65,3 +65,41 @@ raureif test
 ## Examples
 
 * [spanan](https://github.com/chrmod/spanan) - postMessage wrapper
+* [raureif](https://github.com/chrmod/raureif) - raureif itself is build with raureif
+* [green-analytics](https://github.com/cliqz-oss/green-analytics) - uses raureif to
+  build its browser probes.
+
+## Addons
+
+Rauraif has a simple addons system that extends its building capabilities.
+That is, if rauraif project want to process some of its files it can use an
+addon to do that. Examples are:
+
+* [raureif-sass](https://github.com/chrmod/raureif-sass)
+* [raureif-typescript](https://github.com/chrmod/raureif-typescript)
+* [raureif-svelte](https://github.com/chrmod/raureif-svelte)
+
+Essenstially addons wrap Broccoli plugins and preconfigure them to work
+correctly with rauraif project structure.
+
+### Creating addons
+
+Addons are simple node modules that export single object:
+
+```js
+module.exports = {
+  build: function (inputTree) {
+    // process tree
+    return anotherTree;
+  },
+};
+```
+
+Properties of the addon configure it behavior:
+
+* `build` - is a function that takes `src` as broccoli tree and return another
+            broccoli tree. Project trees and addons trees are merged together.
+
+* `folder` - instructs raureif which subfolder of `src` to ignore. It is
+             expected that addon will take care of files in that folder.
+

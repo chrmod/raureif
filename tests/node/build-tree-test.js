@@ -12,5 +12,18 @@ describe('Build Tree', function () {
         createBuildTree(project)
       ).to.be.instanceof(MergeTree)
     });
+
+    context('with addons', function () {
+      it('calls #build of every addon', function (done) {
+        const project = {
+          addons: [
+            {
+              build() { done(); }
+            },
+          ],
+        };
+        createBuildTree(project)
+      });
+    });
   });
 });
