@@ -25,6 +25,8 @@ Use build it project blueprint with:
 raureif new <project name>
 ```
 
+Raureif will copy base project files and start git repository for you.
+
 ### Existing project
 
 Install raureif
@@ -82,6 +84,14 @@ addon to do that. Examples are:
 Essenstially addons wrap Broccoli plugins and preconfigure them to work
 correctly with rauraif project structure.
 
+### Installing addons
+
+Just add addon as devDependency in your project, for example:
+
+```
+npm install raureif-sass --save-dev
+```
+
 ### Creating addons
 
 Addons are simple node modules that export single object:
@@ -103,3 +113,5 @@ Properties of the addon configure it behavior:
 * `folder` - instructs raureif which subfolder of `src` to ignore. It is
              expected that addon will take care of files in that folder.
 
+For raureif to detect the addon, a `raureif-addon` has to be added to keywords
+list inside of addon package.json.

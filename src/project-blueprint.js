@@ -16,7 +16,7 @@ export default class {
     );
     const destPath = this.projectName;
 
-    return copy(srcPath, destPath)
+    return copy(srcPath, destPath, { dot: true })
       .then(function(results) {
         console.info('Copied ' + results.length + ' files');
       })

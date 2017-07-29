@@ -5,6 +5,9 @@
 * test: autogenerate linter tests
 * cli: ability to select build server http port
 * linter: complete airbnb preset
+* project generator: creates git repo
+* project generator: better package.json
+* [FIX] project generator: copies .gitignore
 
 ## 1.6.0
 

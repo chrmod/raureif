@@ -33,6 +33,18 @@ program
       });
     }).then((result) => {
       console.log(result.stdout);
+      return execa('git', ['init'], {
+        cwd: projectPath,
+      });
+    }).then((result) => {
+      return execa('git', ['add', '.'], {
+        cwd: projectPath,
+      });
+    }).then((result) => {
+      return execa('git', ['commit', '-a', '-m', 'initial commit'], {
+        cwd: projectPath,
+      });
+    }).then(() => {
       spinner.start();
       return execa('npm', ['install', 'raureif', '--save-dev'], {
         cwd: projectPath,
