@@ -18,10 +18,24 @@ program
     spinner.setSpinnerString('|/-\\');
 
     blueprint.create().then((result) => {
-      return execa('npm', ['init', '-y'], {
+      console.log('Installing yarn');
+      spinner.start();
+      return execa('npm', ['install', '--save-dev', 'yarn'], {
+        cwd: projectPath,
+      });
+    }).then(() => {
+      spinner.stop(true);
+      return execa('yarn', ['init', '-y'], {
+        cwd: projectPath,
+      });
+    }).then(() => {
+      console.log('Installing dependencies');
+      spinner.start();
+      return execa('yarn', ['install'], {
         cwd: projectPath,
       });
     }).then((result) => {
+      spinner.stop(true);
       console.log(result.stdout);
       return execa('git', ['init'], {
         cwd: projectPath,
@@ -34,13 +48,5 @@ program
       return execa('git', ['commit', '-a', '-m', 'initial commit'], {
         cwd: projectPath,
       });
-    }).then(() => {
-      spinner.start();
-      return execa('npm', ['install', 'raureif', '--save-dev'], {
-
-        cwd: projectPath,
-      });
-    }).then((result) => {
-      spinner.stop(true);
     }).catch(console.error);
   });
