@@ -29,9 +29,17 @@ export default class {
 
   get addons() {
     return this.dependencies.map(depName => {
-      const entryPoint = resolve.sync(depName, { basedir: this.path });
-      const pkgPath = findup.sync('package.json', { cwd: entryPoint });
-      const pkg = require(pkgPath);
+      let entryPoint;
+      let pkg;
+
+      try {
+        entryPoint = resolve.sync(depName, { basedir: this.path });
+        const pkgPath = findup.sync('package.json', { cwd: entryPoint });
+        pkg = require(pkgPath);
+      } catch (e) {
+        pkg = {};
+      }
+
       return {
         entryPoint,
         pkg,

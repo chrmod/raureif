@@ -10,7 +10,7 @@ multiple enviroments (node/browser/iot) - raureif may be a tool for your.
 To get `raureif` in the PATH, install it globally:
 
 ```
-npm install raureif -g
+yarn global add raureif
 ```
 
 ## Usage
@@ -32,7 +32,7 @@ Raureif will copy base project files and start git repository for you.
 Install raureif
 
 ```
-npm install raureif --save-dev
+yarn add raureif -D
 ```
 
 ### Basic operations
@@ -89,7 +89,7 @@ correctly with rauraif project structure.
 Just add addon as devDependency in your project, for example:
 
 ```
-npm install raureif-sass --save-dev
+yarn add raureif-sass -D
 ```
 
 ### Creating addons
