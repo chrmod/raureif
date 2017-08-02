@@ -1,11 +1,13 @@
 language: node_js
 node_js:
-  - '6'
+- '6'
 cache: yarn
 deploy:
-  - provider: npm
-    email: krzysztof.modras@gmail.com
-    on:
-      tags: true
-    api_key:
-      secure: o+ahiuhFKTPFSMpOfw2bVjNs49QyCf3Wx7TWHTMbWq95XHXw3tVmaNeThQRUj46OzspjDWgK50gUHjIMU64FQzRdk1K5mUB9V2tMWHbbYt7jhYptlcAljowdfjBgzFsx/t7MKi2gdVA/Y6i1nPvIRHhO/covw9tynfV2POmrbyFEUujbndaZFdU6rtP2/kpRlreP7uclrpvrfChSdKZrnNOgpfr++sjdRj/BWVslNs/1DXkvM3hdGmWtHkfMovNH1scJN0uEdGBjJUNbf0HO2TEb2a0tcshdMMx22eHFpugp/gPi2xw/XYKDmObQon+fQd+MhHnyyejhG0/3LwaxLUKnPQJiRSXJ+CaH5aI7p64O6bOHLGbM5iypABV31Mp8wJpxTs4p4WDVyRwbib7NLTV28wgzV5MQNXgh+zuOjwic7Sb3wG2tcaqJ0nDq4m8861ONy0svkLw+fLkIgLrHoMVlymDaiFqXxB06dLREYjf3/ZEIem3kiYPXOf39TzkDmX2fbJvYsFZLUiPd+JFMOzRdzAiB/nkurqk88wW3ScsK9kC88wiwbsbBJn7j/o9ZZMPChRUvpj3TDxim7I3cBtuC8Z5Yb9KBrCKtMvxOEHsM63RG+e+JoSYUpLnmGEmhnOOWhtn3cfitgKRnwyLB11AkFIVVkf21otRcp27UbMk=
+  provider: npm
+  email: krzysztof.modras@gmail.com
+  skip_cleanup: true
+  api_key:
+    secure: XQgUznfx7Js1mgXKf/XmOuNnSivh0OAmNRN7cTBfzzA6XP8gCY+0QJRSd8ia9niOLWlSNXnjfRSEbJ0GT78gh75J8EB/5wtGo18Qex0EJrUEj897c8sSuBot0hYUkaboGVtY8hkUoNMNbhIRnhbgjmDTdb3j2N0+LfecLClD0TwjY4iWj4jqIJZh7T48qlUxfO2C+DVnw5EO/CkRlxDn34VMinbfAm4c0mC9yOynnzaNMuXxEguQU6SpBoj4A3Sr7dSdvt8U7Ozmz4FNd7A9m/0ReIQfuBhAHeibU4eqUpbtZtI2hPaKyYW8lPBSL7CwMjaH711O/X7nPjTpepbXWStxracO+ezDBXQcRmWiCeG7bf12wUFRBcM+FVCmzLt/5yZYtGEQoaE8RGaeYOpbzh8RTdPiH+xB8/r4tC677MqssBTPqeueOHXSbbrdQop/q1MXqv+J2DlSdZhkiAV5VkvOrSESOp6P3ol9nSRY5FP3hb3RNqoLXZM8fgoVSIpZ7BuqNcUh1G1PcW6vButWlecvN76RcOi4e98PZLfQSBgwJnCU7n/QPmpN6Qo4tNbgUsz7XiBdP1mr8ihxubX7fW3Oqln2A0mg3xqzdTsxdIOG34hvo1GbJTSC8a09G3mJ4dR4Wd5J4PEcuxwBJGn2yfd54QSavZrvgs7nKQl731w=
+  on:
+    tags: true
+    repo: chrmod/raureif
