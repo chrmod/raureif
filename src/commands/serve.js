@@ -3,19 +3,19 @@ import program from 'commander';
 
 import { createBuilder } from '../build-tree';
 
-import { OUTPUT_PATH, project } from './common';
+import { project } from './common';
+import { onBuild } from '../hooks';
 
 program
   .command('serve')
   .description('starts building server that watches src file changes')
   .option('-p, --port <port>', 'http serve port', 3000)
   .action(function ({ port }) {
-    const { builder, copy } = createBuilder(project);
+    const { builder } = createBuilder(project);
     const watcher = new Watcher(builder);
 
     watcher.on('buildSuccess', function () {
-      rimraf.sync(OUTPUT_PATH);
-      copy();
+      onBuild(builder, project);
     });
 
     BroccoliServer.serve(watcher, 'localhost', Number(port));

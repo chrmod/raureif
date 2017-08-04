@@ -6,7 +6,6 @@ import babelPreset2015 from 'babel-preset-es2015';
 import eslint from 'broccoli-lint-eslint';
 import broccoli from 'broccoli';
 import broccoliSource from 'broccoli-source';
-import copyDereference from 'copy-dereference';
 import fs from 'fs';
 import path from 'path';
 import uppercamelcase from 'uppercamelcase';
@@ -19,7 +18,6 @@ const OUTPUT_PATH = 'dist';
 const WatchedDir = broccoliSource.WatchedDir;
 const Watcher = broccoli.Watcher;
 const basePath = process.cwd();
-const copyDereferenceSync = copyDereference.sync;
 
 const buildForBrowser = () => {
   return !!require(path.join(basePath, 'package.json')).browser;
@@ -136,11 +134,5 @@ export function createBuilder(project) {
   return {
     hasBrowserTests,
     builder,
-    copy() {
-      copyDereferenceSync(builder.outputPath, OUTPUT_PATH)
-    },
-    cleanup() {
-      builder.cleanup()
-    },
   };
 };

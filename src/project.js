@@ -21,6 +21,10 @@ class Addon {
 }
 
 export default class {
+  constructor({ outputPath }) {
+    this.outputPath = outputPath;
+  }
+
   get dependencies() {
     return Object.keys(
       Object.assign({}, this.pkg.devDependencies, this.pkg.dependencies)

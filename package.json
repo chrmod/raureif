@@ -41,6 +41,7 @@
     "find-up": "^2.1.0",
     "glob": "^7.1.2",
     "mocha": "chrmod/mocha#tab-error-messages",
+    "node-notifier": "^5.1.2",
     "recursive-copy": "^2.0.6",
     "resolve": "^1.3.3",
     "rimraf": "^2.5.4",

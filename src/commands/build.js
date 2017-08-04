@@ -4,18 +4,18 @@ import printSlowNodes from 'broccoli-slow-trees';
 
 import { createBuilder } from '../build-tree';
 
-import { OUTPUT_PATH, project } from './common';
+import { onBuild } from '../hooks';
+import { project } from './common';
 
 program
   .command('build')
   .description('builds the project into \'dist\' directory')
   .action(() => {
-    const { builder, copy } = createBuilder(project);
+    const { builder } = createBuilder(project);
 
-    rimraf.sync(OUTPUT_PATH);
 
     builder.build().then(() => {
-      return copy();
+      onBuild(builder, project);
     }).then(() => {
       console.log('Build successful');
     }).catch(error => {
