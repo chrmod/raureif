@@ -1,5 +1,9 @@
 # Raureif Changelog
 
+## 1.8.0
+
+* notification on successful build
+
 ## 1.7.0
 
 * test: autogenerate linter tests
