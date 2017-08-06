@@ -44,47 +44,34 @@ export const createBuildTree = (project) => {
   const packageManifest = require(path.join(basePath, 'package.json'));
   const sourceTree = new WatchedDir(path.join(basePath, 'src'));
   const testsTree = new WatchedDir(path.join(basePath, 'tests'));
-  const tree = new MergeTrees([
-    sourceTree,
-    new Funnel(lint(sourceTree), {
-      includes: ['**/*.lint-test.js'],
-      destDir: 'node',
-    }),
-    testsTree,
-  ]);
-  const addonTree = project.addons.reduce((tree, addon) => {
-    const addonTree = addon.build(tree);
+
+  const addonTree = project.addons.reduce((t, addon) => {
+    const addonTree = addon.build(t);
 
     if (!addonTree) {
-      return tree;
+      return t;
     }
 
     return addonTree;
-
-    return new MergeTrees([
-      tree,
-      addonTree,
-    ], { overwrite: true });
   }, sourceTree);
 
-  const treeWithoutAddonFolders = new Funnel(tree, {
-    exclude: project.addons.filter(a => Boolean(a.folder)).map(a => `${a.folder}/**/*`),
+  const exclude = project.addons.reduce(
+    (all, a) => ([...all, ...a.exclude]),
+    []
+  );
+
+  const sourceWithoutExcludesTree = new Funnel(sourceTree, {
+    exclude,
   });
 
-  let transpiledTree = babel(treeWithoutAddonFolders, {
+  const transpiledTree = babel(sourceWithoutExcludesTree, {
     plugins: [
-      babelPluginAddModleExports,
     ],
     presets: [
       babelPreset2015,
     ],
     browserPolyfill: true,
   });
-
-  transpiledTree = new MergeTrees([
-    transpiledTree,
-    addonTree,
-  ], { overwrite: true });
 
   const getOptions = function(entryPoint) {
     return {
@@ -98,19 +85,35 @@ export const createBuildTree = (project) => {
       cache: true,
     };
   };
-  const outputTrees = [
+
+  const codeTree = new MergeTrees([
+    addonTree,
     transpiledTree,
+    new Funnel(
+      new Funnel(lint(sourceTree), {
+        include: ['**/*.js'],
+      }),
+      {
+        includes: ['**/*.lint-test.js'],
+        destDir: 'node',
+      }
+    ),
+    testsTree,
+  ], { overwrite: true });
+
+  const outputTrees = [
+    codeTree,
   ];
 
   if (buildForBrowser()) {
     outputTrees.push(
-      watchify(transpiledTree, getOptions('index'))
+      watchify(codeTree, getOptions('index'))
     );
     const testFiles = glob.sync(
       basePath +  '/tests/browser/**/*-test.js'
     ).map(filePath => '.' + filePath.slice(basePath.length + 6));
     outputTrees.push(
-      watchify(transpiledTree, {
+      watchify(codeTree, {
         browserify: {
           entries: testFiles,
           paths: [basePath + '/node_modules'],
@@ -122,7 +125,10 @@ export const createBuildTree = (project) => {
       })
     );
   }
-  return new MergeTrees(outputTrees);
+
+  return new MergeTrees(outputTrees, {
+    overwrite: true,
+  });
 };
 
 const createWatcher = (builder) => {

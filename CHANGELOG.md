@@ -1,7 +1,8 @@
 # Raureif Changelog
 
-## 1.8.0
+## 2.0.0
 
+* [breaking] removing babel-plugin-add-module-exports
 * notification on successful build
 
 ## 1.7.0
