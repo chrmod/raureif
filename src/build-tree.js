@@ -1,7 +1,6 @@
 import Funnel from 'broccoli-funnel';
 import MergeTrees from 'broccoli-merge-trees';
 import babel from 'broccoli-babel-transpiler';
-import babelPluginAddModleExports from 'babel-plugin-add-module-exports';
 import babelPreset2015 from 'babel-preset-es2015';
 import eslint from 'broccoli-lint-eslint';
 import broccoli from 'broccoli';
