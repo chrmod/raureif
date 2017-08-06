@@ -52,9 +52,20 @@ export const createBuildTree = (project) => {
     }),
     testsTree,
   ]);
-  const addonTrees = project.addons.map(addon => {
-    return addon.build(sourceTree);
-  }).filter(Boolean);
+  const addonTree = project.addons.reduce((tree, addon) => {
+    const addonTree = addon.build(tree);
+
+    if (!addonTree) {
+      return tree;
+    }
+
+    return addonTree;
+
+    return new MergeTrees([
+      tree,
+      addonTree,
+    ], { overwrite: true });
+  }, sourceTree);
 
   const treeWithoutAddonFolders = new Funnel(tree, {
     exclude: project.addons.filter(a => Boolean(a.folder)).map(a => `${a.folder}/**/*`),
@@ -72,7 +83,7 @@ export const createBuildTree = (project) => {
 
   transpiledTree = new MergeTrees([
     transpiledTree,
-    ...addonTrees,
+    addonTree,
   ], { overwrite: true });
 
   const getOptions = function(entryPoint) {
