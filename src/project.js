@@ -16,8 +16,8 @@ class Addon {
     return builder.call(addon, inputTree, this.project);
   }
 
-  get folder() {
-   return this._addon.folder;
+  get exclude() {
+   return this._addon.exclude || [];
   }
 }
 

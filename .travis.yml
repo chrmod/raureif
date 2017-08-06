@@ -1,6 +1,14 @@
 language: node_js
 node_js:
 - '6'
+
+script:
+  - npm test
+  - npm link
+  - cd tests/integration/raureif-typescript-test
+  - npm install; true
+  - npm link raureif
+  - npm test
 cache: yarn
 deploy:
   provider: npm
