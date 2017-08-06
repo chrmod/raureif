@@ -5,7 +5,7 @@ node_js:
 script:
   - npm test
   - npm link
-  - cd tests/integration/raureif-typescript-test
+  - cd integration-tests/raureif-typescript-test
   - npm install; true
   - npm link raureif
   - npm test
