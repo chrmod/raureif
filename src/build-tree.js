@@ -59,9 +59,15 @@ export const createBuildTree = (project) => {
     []
   );
 
-  const sourceWithoutExcludesTree = new Funnel(sourceTree, {
-    exclude,
-  });
+  const sourceWithoutExcludesTree = new Funnel(
+    new MergeTrees([
+      sourceTree,
+      testsTree,
+    ]),
+    {
+      exclude,
+    }
+  );
 
   const transpiledTree = babel(sourceWithoutExcludesTree, {
     plugins: [
@@ -97,7 +103,6 @@ export const createBuildTree = (project) => {
         destDir: 'node',
       }
     ),
-    testsTree,
   ], { overwrite: true });
 
   const outputTrees = [
