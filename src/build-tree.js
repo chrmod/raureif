@@ -71,6 +71,15 @@ export const createBuildTree = (project) => {
 
   const transpiledTree = babel(sourceWithoutExcludesTree, {
     plugins: [
+      ...project.addons
+        .map(a => a.babelOptions.plugins || [])
+        .reduce((all, list) => ([...all, ...list]) , []),
+    ],
+    filterExtensions: [
+      'js',
+      ...project.addons
+        .map(a => a.babelOptions.filterExtensions || [])
+        .reduce((all, list) => ([...all, ...list]) , []),
     ],
     presets: [
       babelPreset2015,

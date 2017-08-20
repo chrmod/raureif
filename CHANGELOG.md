@@ -4,6 +4,7 @@
 
 * [breaking] removing babel-plugin-add-module-exports
 * notification on successful build
+* addons: pass custom babel options
 
 ## 1.7.0
 
