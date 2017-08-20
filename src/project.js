@@ -7,7 +7,8 @@ class Addon {
     this.project = project;
     this.entryPoint = entryPoint;
     this.pkg = pkg;
-    this._addon = require(this.entryPoint);
+    const addon = require(this.entryPoint);
+    this._addon = addon.default || addon;
   }
 
   build(inputTree) {
@@ -16,8 +17,12 @@ class Addon {
     return builder.call(addon, inputTree, this.project);
   }
 
+  get babelOptions() {
+    return this._addon.babelOptions || {};
+  }
+
   get exclude() {
-   return this._addon.exclude || [];
+    return this._addon.exclude || [];
   }
 }
 
