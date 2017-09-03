@@ -26,18 +26,34 @@ const hasBrowserTests = () => {
   return buildForBrowser() && fs.existsSync(path.join(basePath, 'tests', 'browser'));
 };
 
-const lint = (tree) => eslint(tree, {
-  // TODO: should use 'mocha' - which currently does not print errors due to:
-  //   https://github.com/ember-cli/aot-test-generators/blob/master/src/mocha.ts#L29
-  testGenerator: 'mocha',
-  options: {
-    configFile: path.join(
-       __dirname,
-      '..',
-      '.eslintrc.json',
-    ),
-  }
-});
+const lint = (tree, project) => {
+  const baseConfig = [
+    {
+      extends: [
+        "airbnb",
+      ]
+    },
+    ...project.addons.map(a => a.eslintOptions)
+  ].reduce((prev, curr) => Object.assign(prev, curr), {});
+
+  const lintTree = eslint(tree, {
+    // TODO: should use 'mocha' - which currently does not print errors due to:
+    //   https://github.com/ember-cli/aot-test-generators/blob/master/src/mocha.ts#L29
+    testGenerator: 'mocha',
+    options: {
+      cwd: project.path,
+      baseConfig,
+    }
+  });
+
+  project.addons.forEach(addon => {
+    Object.keys(addon.eslintPlugins).forEach(pluginName => {
+      lintTree.cli.addPlugin(pluginName, addon.eslintPlugins[pluginName]);
+    });
+  });
+
+  return lintTree;
+}
 
 export const createBuildTree = (project) => {
   const packageManifest = require(path.join(basePath, 'package.json'));
@@ -83,6 +99,9 @@ export const createBuildTree = (project) => {
     ],
     presets: [
       babelPreset2015,
+      ...project.addons
+        .map(a => a.babelOptions.presets || [])
+        .reduce((all, list) => ([...all, ...list]) , []),
     ],
     browserPolyfill: true,
   });
@@ -104,7 +123,7 @@ export const createBuildTree = (project) => {
     addonTree,
     transpiledTree,
     new Funnel(
-      new Funnel(lint(sourceTree), {
+      new Funnel(lint(sourceTree, project), {
         include: ['**/*.js'],
       }),
       {
