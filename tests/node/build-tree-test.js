@@ -6,6 +6,7 @@ describe('Build Tree', function () {
   describe('createBuildTree', function () {
     it('return broccoli tree', function () {
       const project = {
+        path: './',
         addons: []
       };
       expect(
@@ -18,7 +19,7 @@ describe('Build Tree', function () {
         const project = {
           addons: [
             {
-              build() { done(); }
+              build() { done(); },
             },
           ],
         };
