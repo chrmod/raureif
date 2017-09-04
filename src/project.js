@@ -21,6 +21,14 @@ class Addon {
     return this._addon.babelOptions || {};
   }
 
+  get eslintOptions() {
+    return this._addon.eslintOptions || {};
+  }
+
+  get eslintPlugins() {
+    return this._addon.eslintPlugins || {};
+  }
+
   get exclude() {
     return this._addon.exclude || [];
   }
