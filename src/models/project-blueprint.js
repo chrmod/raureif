@@ -24,8 +24,5 @@ export default class {
         console.error('Copy failed: ' + error);
         throw error;
       });
-
-    // TODO:
-    // * git init
   }
 }

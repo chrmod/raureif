@@ -3,7 +3,7 @@ import execa from 'execa';
 import path from 'path';
 import program from 'commander';
 
-import ProjectBlueprint from '../project-blueprint';
+import ProjectBlueprint from '../models/project-blueprint';
 
 program
   .command('new <projectName>')
