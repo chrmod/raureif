@@ -86,6 +86,8 @@ export const createBuildTree = (project) => {
   );
 
   const transpiledTree = babel(sourceWithoutExcludesTree, {
+    babelrc: false,
+    compact: false,
     plugins: [
       ...project.addons
         .map(a => a.babelOptions.plugins || [])

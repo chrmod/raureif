@@ -18,5 +18,7 @@ program
       onBuild(builder, project);
     });
 
+    watcher.on('buildFailure', e => console.error(e));
+
     BroccoliServer.serve(watcher, 'localhost', Number(port));
   });

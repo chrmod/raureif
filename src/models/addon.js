@@ -1,4 +1,4 @@
-export class Addon {
+export default class Addon {
   constructor(entryPoint, pkg, project) {
     this.project = project;
     this.entryPoint = entryPoint;
