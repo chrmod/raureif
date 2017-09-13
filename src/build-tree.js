@@ -1,7 +1,7 @@
 import Funnel from 'broccoli-funnel';
 import MergeTrees from 'broccoli-merge-trees';
 import babel from 'broccoli-babel-transpiler';
-import babelPreset2015 from 'babel-preset-es2015';
+import babelPresetEs2015 from 'babel-preset-es2015';
 import eslint from 'broccoli-lint-eslint';
 import broccoli from 'broccoli';
 import broccoliSource from 'broccoli-source';
@@ -100,7 +100,7 @@ export const createBuildTree = (project) => {
         .reduce((all, list) => ([...all, ...list]) , []),
     ],
     presets: [
-      babelPreset2015,
+      require.resolve('babel-preset-es2015'),
       ...project.addons
         .map(a => a.babelOptions.presets || [])
         .reduce((all, list) => ([...all, ...list]) , []),
