@@ -1,8 +1,5 @@
 import Funnel from 'broccoli-funnel';
 import MergeTrees from 'broccoli-merge-trees';
-import babel from 'broccoli-babel-transpiler';
-import babelPresetEs2015 from 'babel-preset-es2015';
-import eslint from 'broccoli-lint-eslint';
 import broccoli from 'broccoli';
 import broccoliSource from 'broccoli-source';
 import fs from 'fs';
@@ -11,6 +8,9 @@ import uppercamelcase from 'uppercamelcase';
 import watchify from 'broccoli-watchify';
 import glob from 'glob';
 import jsesc from 'jsesc';
+
+import lint from './broccoli/linter';
+import transpile from './broccoli/transpiler';
 
 const Builder = broccoli.Builder;
 const OUTPUT_PATH = 'dist';
@@ -25,35 +25,6 @@ const buildForBrowser = () => {
 const hasBrowserTests = () => {
   return buildForBrowser() && fs.existsSync(path.join(basePath, 'tests', 'browser'));
 };
-
-const lint = (tree, project) => {
-  const baseConfig = [
-    {
-      extends: [
-        "airbnb",
-      ]
-    },
-    ...project.addons.map(a => a.eslintOptions)
-  ].reduce((prev, curr) => Object.assign(prev, curr), {});
-
-  const lintTree = eslint(tree, {
-    // TODO: should use 'mocha' - which currently does not print errors due to:
-    //   https://github.com/ember-cli/aot-test-generators/blob/master/src/mocha.ts#L29
-    testGenerator: 'mocha',
-    options: {
-      cwd: project.path,
-      baseConfig,
-    }
-  });
-
-  project.addons.forEach(addon => {
-    Object.keys(addon.eslintPlugins).forEach(pluginName => {
-      lintTree.cli.addPlugin(pluginName, addon.eslintPlugins[pluginName]);
-    });
-  });
-
-  return lintTree;
-}
 
 export const createBuildTree = (project) => {
   const packageManifest = require(path.join(basePath, 'package.json'));
@@ -85,28 +56,7 @@ export const createBuildTree = (project) => {
     }
   );
 
-  const transpiledTree = babel(sourceWithoutExcludesTree, {
-    babelrc: false,
-    compact: false,
-    plugins: [
-      ...project.addons
-        .map(a => a.babelOptions.plugins || [])
-        .reduce((all, list) => ([...all, ...list]) , []),
-    ],
-    filterExtensions: [
-      'js',
-      ...project.addons
-        .map(a => a.babelOptions.filterExtensions || [])
-        .reduce((all, list) => ([...all, ...list]) , []),
-    ],
-    presets: [
-      require.resolve('babel-preset-es2015'),
-      ...project.addons
-        .map(a => a.babelOptions.presets || [])
-        .reduce((all, list) => ([...all, ...list]) , []),
-    ],
-    browserPolyfill: true,
-  });
+  const transpiledTree = transpile(sourceWithoutExcludesTree, project);
 
   const getOptions = function(entryPoint) {
     return {
