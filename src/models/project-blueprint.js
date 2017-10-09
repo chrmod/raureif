@@ -11,6 +11,7 @@ export default class {
     const srcPath = path.join(
       __dirname,
       '..',
+      '..',
       'blueprints',
       'project'
     );
