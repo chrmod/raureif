@@ -15,6 +15,6 @@
     "!dist/polyfill.js"
   ],
   "devDependencies": {
-    "raureif": "2.0.1"
+    "raureif": "2.0.6"
   }
 }
