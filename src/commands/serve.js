@@ -2,7 +2,7 @@ import { server as BroccoliServer, Watcher } from 'broccoli';
 import program from 'commander';
 
 import { createBuilder } from '../build-tree';
-import { project } from './common';
+import getProject from './common';
 import onBuild from '../hooks';
 import Console from '../console';
 
@@ -11,6 +11,7 @@ program
   .description('starts building server that watches src file changes')
   .option('-p, --port <port>', 'http serve port', 3000)
   .action(({ port }) => {
+    const project = getProject();
     const { builder } = createBuilder(project);
     const watcher = new Watcher(builder);
 

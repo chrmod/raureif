@@ -4,12 +4,13 @@ import Console from '../console';
 import { createBuilder } from '../build-tree';
 
 import onBuild from '../hooks';
-import { project } from './common';
+import getProject from './common';
 
 program
   .command('build')
   .description('builds the project into \'dist\' directory')
   .action(() => {
+    const project = getProject();
     const { builder } = createBuilder(project);
 
 
