@@ -1,12 +1,11 @@
 import program from 'commander';
-import printSlowNodes from 'broccoli-slow-trees';
-import rimraf from 'rimraf';
 import path from 'path';
-import { server as BroccoliServer, Watcher } from 'broccoli';
 import Testem from 'testem';
+import { Watcher } from 'broccoli';
 
 import { createBuilder } from '../build-tree';
-import { onBuild } from '../hooks';
+import Console from '../console';
+import onBuild from '../hooks';
 import { project } from './common';
 
 program
@@ -18,13 +17,11 @@ program
     const watcher = new Watcher(builder);
     const testem = new Testem();
     const modes = {
-      'dev': 'startDev',
-      'ci': 'startCI',
+      dev: 'startDev',
+      ci: 'startCI',
     };
     const testemMode = args.ci ? modes.ci : modes.dev;
     const launchers = ['Node'];
-    let running = false;
-
     if (hasBrowserTests()) {
       if (args.ci) {
         launchers.push('PhantomJS');
@@ -32,46 +29,55 @@ program
         launchers.push('firefox');
       }
     }
-
-    watcher.on('buildFailure', function (error) {
-      console.error('raureif error:', error.name)
-      console.error()
-      console.error(error.message)
-      console.error()
-      console.error('raureif error stack strace:')
-      console.error(error.stack)
-    });
-
-    watcher.on('buildSuccess', function () {
-      onBuild(builder, project);
-
-      if (!running) {
-        testem[testemMode]({
-          framework: 'mocha',
-          src_files: [
-            'dist/polyfill.js',
-            'dist/tests.browser.js'
+    const testemConfig = {
+      framework: 'mocha',
+      src_files: [
+        'dist/polyfill.js',
+        'dist/tests.browser.js',
+      ],
+      launchers: {
+        Node: {
+          exe: 'node',
+          args: [
+            path.join(
+              process.cwd(),
+              'node_modules',
+              'raureif',
+              'dist',
+              'runtest',
+            ),
           ],
-          launchers: {
-            'Node': {
-              exe: 'node',
-              args: [
-                path.join(
-                  process.cwd(),
-                  'node_modules',
-                  'raureif',
-                  'dist',
-                  'runtest'
-                )
-              ],
-              protocol: 'tap',
-            },
-          },
-          launch: launchers.join(',')
-        });
-        running = true;
-      } else {
-        testem.restart();
+          protocol: 'tap',
+        },
+      },
+      launch: launchers.join(','),
+    };
+    const test = testem[testemMode].bind(testem);
+    const onError = (error) => {
+      Console.error('raureif error:', error.name);
+      Console.error();
+      Console.error(error.message);
+      Console.error();
+      Console.error('raureif error stack strace:');
+      Console.error(error.stack);
+    };
+    let running = false;
+
+
+    watcher.on('buildFailure', onError);
+
+    watcher.on('buildSuccess', () => {
+      try {
+        onBuild(builder, project);
+
+        if (!running) {
+          test(testemConfig);
+          running = true;
+        } else {
+          testem.restart();
+        }
+      } catch (e) {
+        onError(e);
       }
     });
     watcher.start();

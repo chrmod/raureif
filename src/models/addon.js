@@ -4,28 +4,27 @@ export default class Addon {
     this.entryPoint = entryPoint;
     this.pkg = pkg;
     const addon = require(this.entryPoint);
-    this._addon = addon.default || addon;
+    this.addon = addon.default || addon;
   }
 
   build(inputTree) {
-    const addon = this._addon;
-    const builder = addon.build || function () {};
-    return builder.call(addon, inputTree, this.project);
+    const builder = this.addon.build || (() => {});
+    return builder.call(this.addon, inputTree, this.project);
   }
 
   get babelOptions() {
-    return this._addon.babelOptions || {};
+    return this.addon.babelOptions || {};
   }
 
   get eslintOptions() {
-    return this._addon.eslintOptions || {};
+    return this.addon.eslintOptions || {};
   }
 
   get eslintPlugins() {
-    return this._addon.eslintPlugins || {};
+    return this.addon.eslintPlugins || {};
   }
 
   get exclude() {
-    return this._addon.exclude || [];
+    return this.addon.exclude || [];
   }
 }
