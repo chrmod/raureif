@@ -4,9 +4,7 @@ import glob from 'glob';
 
 global.chai = chai;
 
-const getPaths = () => {
-  return glob.sync('dist/node/**/*-test.js');
-};
+const getPaths = () => glob.sync('dist/node/**/*-test.js');
 
 export default function run() {
   const testPaths = getPaths();
@@ -15,8 +13,8 @@ export default function run() {
     reporter: 'tap',
   });
   testPaths.forEach(mocha.addFile.bind(mocha));
-  mocha.run()
-};
+  mocha.run();
+}
 
 if (require.main === module) {
   run();

@@ -1,10 +1,9 @@
 import program from 'commander';
-import rimraf from 'rimraf';
-import printSlowNodes from 'broccoli-slow-trees';
 
+import Console from '../console';
 import { createBuilder } from '../build-tree';
 
-import { onBuild } from '../hooks';
+import onBuild from '../hooks';
 import { project } from './common';
 
 program
@@ -17,8 +16,8 @@ program
     builder.build().then(() => {
       onBuild(builder, project);
     }).then(() => {
-      console.log('Build successful');
-    }).catch(error => {
-      console.error('Something went wrong', error);
+      Console.log('Build successful');
+    }).catch((error) => {
+      Console.error('Something went wrong', error);
     });
   });

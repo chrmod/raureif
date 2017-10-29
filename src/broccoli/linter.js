@@ -4,10 +4,10 @@ export default function (tree, project) {
   const baseConfig = [
     {
       extends: [
-        "airbnb",
-      ]
+        'airbnb',
+      ],
     },
-    ...project.addons.map(a => a.eslintOptions)
+    ...project.addons.map(a => a.eslintOptions),
   ].reduce((prev, curr) => Object.assign(prev, curr), {});
 
   const lintTree = eslint(tree, {
@@ -20,8 +20,8 @@ export default function (tree, project) {
     },
   });
 
-  project.addons.forEach(addon => {
-    Object.keys(addon.eslintPlugins).forEach(pluginName => {
+  project.addons.forEach((addon) => {
+    Object.keys(addon.eslintPlugins).forEach((pluginName) => {
       lintTree.cli.addPlugin(pluginName, addon.eslintPlugins[pluginName]);
     });
   });
