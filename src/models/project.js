@@ -4,14 +4,14 @@ import path from 'path';
 
 import Addon from './addon';
 
-const projectPath = process.cwd();
-const projectPackage = require(path.join(projectPath, 'package.json'));
-
 export default class {
-  constructor({ outputPath }) {
+  constructor({ projectPath, outputPath }) {
     this.outputPath = outputPath;
-    this.pkg = projectPackage;
     this.path = projectPath;
+  }
+
+  get pkg() {
+    return require(path.join(this.path, 'package.json'));
   }
 
   get name() {

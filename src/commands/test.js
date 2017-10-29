@@ -6,13 +6,14 @@ import { Watcher } from 'broccoli';
 import { createBuilder } from '../build-tree';
 import Console from '../console';
 import onBuild from '../hooks';
-import { project } from './common';
+import getProject from './common';
 
 program
   .command('test')
   .description('run tests with live reloading server')
   .option('--ci', 'Continuous Integration mode')
   .action((args) => {
+    const project = getProject();
     const { builder, hasBrowserTests } = createBuilder(project);
     const watcher = new Watcher(builder);
     const testem = new Testem();

@@ -1,6 +1,8 @@
 import Project from '../models/project';
 
-export const OUTPUT_PATH = 'dist';
-export const project = new Project({
-  outputPath: OUTPUT_PATH,
-});
+export default function () {
+  return new Project({
+    projectPath: process.cwd(),
+    outputPath: 'dist',
+  });
+}
