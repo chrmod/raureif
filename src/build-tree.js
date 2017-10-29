@@ -8,7 +8,6 @@ import uppercamelcase from 'uppercamelcase';
 import watchify from 'broccoli-watchify';
 import glob from 'glob';
 
-import lint from './broccoli/linter';
 import transpile from './broccoli/transpiler';
 
 const { Builder } = broccoli;
@@ -64,15 +63,6 @@ export const createBuildTree = (project) => {
   const codeTree = new MergeTrees([
     addonTree,
     transpiledTree,
-    new Funnel(
-      new Funnel(lint(sourceTree, project), {
-        include: ['**/*.js'],
-      }),
-      {
-        includes: ['**/*.lint-test.js'],
-        destDir: 'node',
-      },
-    ),
   ], { overwrite: true });
 
   const outputTrees = [

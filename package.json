@@ -1,6 +1,6 @@
 {
   "name": "raureif",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Basic toolset for library authoring",
   "repository": "https://github.com/chrmod/raureif",
   "author": "Krzysztof Jan Modras <chrmod@chrmod.net>",
