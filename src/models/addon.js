@@ -12,6 +12,11 @@ export default class Addon {
     return builder.call(this.addon, inputTree, this.project);
   }
 
+  postBuild(inputTree) {
+    const builder = this.addon.postBuild || (() => {});
+    return builder.call(this.addon, inputTree, this.project);
+  }
+
   get babelOptions() {
     return this.addon.babelOptions || {};
   }

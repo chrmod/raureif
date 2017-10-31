@@ -1,7 +1,7 @@
 import program from 'commander';
 
 import Console from '../console';
-import { createBuilder } from '../build-tree';
+import createBuilder from '../build-tree';
 
 import onBuild from '../hooks';
 import getProject from './common';
@@ -11,8 +11,7 @@ program
   .description('builds the project into \'dist\' directory')
   .action(() => {
     const project = getProject();
-    const { builder } = createBuilder(project);
-
+    const builder = createBuilder(project);
 
     builder.build().then(() => {
       onBuild(builder, project);

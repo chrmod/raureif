@@ -1,9 +1,10 @@
 import program from 'commander';
 import path from 'path';
+import fs from 'fs';
 import Testem from 'testem';
 import { Watcher } from 'broccoli';
 
-import { createBuilder } from '../build-tree';
+import createBuilder from '../build-tree';
 import Console from '../console';
 import onBuild from '../hooks';
 import getProject from './common';
@@ -14,7 +15,8 @@ program
   .option('--ci', 'Continuous Integration mode')
   .action((args) => {
     const project = getProject();
-    const { builder, hasBrowserTests } = createBuilder(project);
+    const hasBrowserTests = fs.existsSync(path.join(project.path, 'tests', 'browser'));
+    const builder = createBuilder(project);
     const watcher = new Watcher(builder);
     const testem = new Testem();
     const modes = {
@@ -23,7 +25,7 @@ program
     };
     const testemMode = args.ci ? modes.ci : modes.dev;
     const launchers = ['Node'];
-    if (hasBrowserTests()) {
+    if (hasBrowserTests) {
       if (args.ci) {
         launchers.push('PhantomJS');
       } else {

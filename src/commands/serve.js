@@ -1,7 +1,7 @@
 import { server as BroccoliServer, Watcher } from 'broccoli';
 import program from 'commander';
 
-import { createBuilder } from '../build-tree';
+import createBuilder from '../build-tree';
 import getProject from './common';
 import onBuild from '../hooks';
 import Console from '../console';
@@ -12,7 +12,7 @@ program
   .option('-p, --port <port>', 'http serve port', 3000)
   .action(({ port }) => {
     const project = getProject();
-    const { builder } = createBuilder(project);
+    const builder = createBuilder(project);
     const watcher = new Watcher(builder);
 
     watcher.on('buildSuccess', () => onBuild(builder, project));

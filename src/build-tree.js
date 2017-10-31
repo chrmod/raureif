@@ -2,26 +2,18 @@ import Funnel from 'broccoli-funnel';
 import MergeTrees from 'broccoli-merge-trees';
 import broccoli from 'broccoli';
 import broccoliSource from 'broccoli-source';
-import fs from 'fs';
 import path from 'path';
-import uppercamelcase from 'uppercamelcase';
-import watchify from 'broccoli-watchify';
-import glob from 'glob';
 
 import transpile from './broccoli/transpiler';
 
 const { Builder } = broccoli;
 const { WatchedDir } = broccoliSource;
-const basePath = process.cwd();
-
-const buildForBrowser = () => !!require(path.join(basePath, 'package.json')).browser;
-const hasBrowserTests = () => buildForBrowser() && fs.existsSync(path.join(basePath, 'tests', 'browser'));
 
 export const createBuildTree = (project) => {
-  const packageManifest = require(path.join(basePath, 'package.json'));
-  const sourceTree = new WatchedDir(path.join(basePath, 'src'));
-  const testsTree = new WatchedDir(path.join(basePath, 'tests'));
+  const sourceTree = new WatchedDir(path.join(project.path, 'src'));
+  const testsTree = new WatchedDir(path.join(project.path, 'tests'));
 
+  // let addons compile the tree
   const addonTree = project.addons.reduce((t, addon) => {
     const tree = addon.build(t);
 
@@ -32,11 +24,13 @@ export const createBuildTree = (project) => {
     return tree;
   }, sourceTree);
 
+  // prepare the list of exclusions
   const exclude = project.addons.reduce(
     (all, a) => ([...all, ...a.exclude]),
     [],
   );
 
+  // exclude file already "taken" by addons
   const sourceWithoutExcludesTree = new Funnel(
     new MergeTrees([
       sourceTree,
@@ -47,58 +41,29 @@ export const createBuildTree = (project) => {
     },
   );
 
+  // transpile code
   const transpiledTree = transpile(sourceWithoutExcludesTree, project);
 
-  const getOptions = entryPoint => ({
-    browserify: {
-      entries: [`./${entryPoint}.js`],
-      paths: [`${basePath}/node_modules`],
-      standalone: uppercamelcase(packageManifest.name),
-      debug: false,
-    },
-    outputFile: `/${entryPoint}.browser.js`,
-    cache: true,
-  });
 
+  // merge addons and transpiled trees
   const codeTree = new MergeTrees([
     addonTree,
     transpiledTree,
   ], { overwrite: true });
 
-  const outputTrees = [
+  const addonPostBuildTrees = project.addons
+    .map(addon => addon.postBuild(codeTree))
+    .filter(t => Boolean(t));
+
+  const codeTree2 = new MergeTrees([
+    ...addonPostBuildTrees,
     codeTree,
-  ];
+  ], { overwrite: true });
 
-  if (buildForBrowser()) {
-    outputTrees.push(watchify(codeTree, getOptions('index')));
-
-    const testFiles = glob
-      .sync(`${basePath}/tests/browser/**/*-test.js`)
-      .map(filePath => `.${filePath.slice(basePath.length + 6)}`);
-
-    outputTrees.push(watchify(codeTree, {
-      browserify: {
-        entries: testFiles,
-        paths: [`${basePath}/node_modules`],
-        standalone: uppercamelcase(packageManifest.name),
-        debug: false,
-      },
-      outputFile: '/tests.browser.js',
-      cache: true,
-    }));
-  }
-
-  return new MergeTrees(outputTrees, {
-    overwrite: true,
-  });
+  return codeTree2;
 };
 
-export function createBuilder(project) {
+export default function (project) {
   const tree = createBuildTree(project);
-  const builder = new Builder(tree);
-
-  return {
-    hasBrowserTests,
-    builder,
-  };
+  return new Builder(tree);
 }
