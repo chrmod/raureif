@@ -82,6 +82,8 @@ addon to do that. Examples are:
 * [raureif-svelte](https://github.com/chrmod/raureif-svelte)
 * [raureif-systemjs](https://github.com/chrmod/raureif-systemjs)
 * [raureif-glimmer](https://github.com/chrmod/raureif-glimmer)
+* [raureif-eslint](https://github.com/chrmod/raureif-eslint)
+* [raureif-browserify](https://github.com/chrmod/raureif-browserify)
 
 Essenstially addons wrap Broccoli plugins and preconfigure them to work
 correctly with rauraif project structure.
