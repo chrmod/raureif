@@ -4,17 +4,11 @@ import broccoli from 'broccoli';
 import broccoliSource from 'broccoli-source';
 import path from 'path';
 
-import transpile from './broccoli/transpiler';
-
 const { Builder } = broccoli;
 const { WatchedDir } = broccoliSource;
 
-export const createBuildTree = (project) => {
-  const sourceTree = new WatchedDir(path.join(project.path, 'src'));
-  const testsTree = new WatchedDir(path.join(project.path, 'tests'));
-
-  // let addons compile the tree
-  const addonTree = project.addons.reduce((t, addon) => {
+const processAddons = (srcTree, project) =>
+  project.preBundleAddons.reduce((t, addon) => {
     const tree = addon.build(t);
 
     if (!tree) {
@@ -22,45 +16,28 @@ export const createBuildTree = (project) => {
     }
 
     return tree;
-  }, sourceTree);
+  }, srcTree);
 
-  // prepare the list of exclusions
-  const exclude = project.addons.reduce(
-    (all, a) => ([...all, ...a.exclude]),
-    [],
-  );
+export const createBuildTree = (project) => {
+  const sourceTree = new WatchedDir(path.join(project.path, 'src'));
+  const testsTree = new WatchedDir(path.join(project.path, 'tests'));
 
-  // exclude file already "taken" by addons
-  const sourceWithoutExcludesTree = new Funnel(
-    new MergeTrees([
-      sourceTree,
-      testsTree,
-    ]),
-    {
-      exclude,
-    },
-  );
+  const sourcePlusAddonsTree = processAddons(sourceTree, project);
+  const testsPlusAddonsTree = processAddons(testsTree, project);
 
-  // transpile code
-  const transpiledTree = transpile(sourceWithoutExcludesTree, project);
+  const srcTree = new Funnel(new MergeTrees([
+    sourcePlusAddonsTree,
+    testsPlusAddonsTree,
+  ]));
 
-
-  // merge addons and transpiled trees
-  const codeTree = new MergeTrees([
-    addonTree,
-    transpiledTree,
-  ], { overwrite: true });
-
-  const addonPostBuildTrees = project.addons
-    .map(addon => addon.postBuild(codeTree))
+  const addonPostBuildTrees = project.bundleAddons
+    .map(addon => addon.postBuild(srcTree))
     .filter(t => Boolean(t));
 
-  const codeTree2 = new MergeTrees([
+  return new MergeTrees([
     ...addonPostBuildTrees,
-    codeTree,
+    srcTree,
   ], { overwrite: true });
-
-  return codeTree2;
 };
 
 export default function (project) {

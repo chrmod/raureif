@@ -8,22 +8,26 @@ describe('Build Tree', function () {
     it('return broccoli tree', function () {
       const project = {
         path: './',
-        addons: [],
+        preBundleAddons: [],
+        bundleAddons: [],
       };
       expect(createBuildTree(project)).to.be.instanceof(MergeTree);
     });
 
     context('with addons', function () {
-      it('calls #build of every addon', function (done) {
+      it('calls #build of every addon', function () {
+        let called = false;
         const project = {
           path: '',
-          addons: [
+          bundleAddons: [],
+          preBundleAddons: [
             {
-              build() { done(); },
+              build() { called = true; },
             },
           ],
         };
         createBuildTree(project);
+        expect(called).to.be.true;
       });
     });
   });

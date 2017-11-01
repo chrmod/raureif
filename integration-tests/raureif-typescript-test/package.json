@@ -15,7 +15,9 @@
     "!dist/polyfill.js"
   ],
   "devDependencies": {
-    "raureif": "1.6.0",
-    "raureif-typescript": "2.0.0"
+    "@types/node": "^8.0.47",
+    "raureif": "2.0.6",
+    "raureif-typescript": "3.0.0",
+    "typescript": "^2.4.2"
   }
 }
