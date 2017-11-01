@@ -7,6 +7,10 @@ export default class Addon {
     this.addon = addon.default || addon;
   }
 
+  get name() {
+    return this.pkg.name;
+  }
+
   build(inputTree) {
     const builder = this.addon.build || (() => {});
     return builder.call(this.addon, inputTree, this.project);
