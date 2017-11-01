@@ -5,6 +5,9 @@ It is highly inspired by amazing tools like `ember-cli`, but aims to be
 framework and platform agnostic. So if you plan to release your library for
 multiple enviroments (node/browser/iot) - raureif may be a tool for your.
 
+Important! Raureif is still in early stage and should not be used for production
+workflows if you're unwilling to fix its internals.
+
 ## Installation
 
 To get `raureif` in the PATH, install it globally:
@@ -80,7 +83,8 @@ addon to do that. Examples are:
 * [raureif-sass](https://github.com/chrmod/raureif-sass)
 * [raureif-typescript](https://github.com/chrmod/raureif-typescript)
 * [raureif-svelte](https://github.com/chrmod/raureif-svelte)
-* [raureif-systemjs](https://github.com/chrmod/raureif-systemjs)
+* [raureif-jsx](https://github.com/chrmod/raureif-jsx)
+* [raureif-flow](https://github.com/chrmod/raureif-flow)
 * [raureif-glimmer](https://github.com/chrmod/raureif-glimmer)
 * [raureif-eslint](https://github.com/chrmod/raureif-eslint)
 * [raureif-browserify](https://github.com/chrmod/raureif-browserify)
