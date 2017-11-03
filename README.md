@@ -1,4 +1,4 @@
-# raureif
+# raureif [![Build Status](https://travis-ci.org/chrmod/raureif.svg?branch=project-generator)](https://travis-ci.org/chrmod/raureif)
 
 Simple toolset for javascript library authoring.
 It is highly inspired by amazing tools like `ember-cli`, but aims to be
