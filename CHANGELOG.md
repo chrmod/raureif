@@ -1,5 +1,12 @@
 # Raureif Changelog
 
+## 3.0.0
+* [breaking] reorganizing build tree and addons system (all addons have to be
+  updated to 3.x)
+
+## 3.0.2
+* [fix] in run only tests from node folder
+
 ## 2.0.0
 
 * [breaking] removing babel-plugin-add-module-exports
