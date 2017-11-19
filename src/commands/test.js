@@ -36,7 +36,7 @@ program
       framework: 'mocha',
       src_files: [
         'dist/polyfill.js',
-        'dist/tests.browser.js',
+        'dist/tests/browser/index.browser.js',
       ],
       launchers: {
         Node: {

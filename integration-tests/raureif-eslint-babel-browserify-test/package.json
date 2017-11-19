@@ -1,5 +1,5 @@
 {
-  "name": "raureif-typescript-test",
+  "name": "raureif-eslint-babel-browserify-test",
   "version": "0.1.0",
   "scripts": {
     "build": "raureif build",
@@ -9,14 +9,16 @@
     "prebuild": "npm run test"
   },
   "main": "dist/index.js",
+  "browser": "dist/index.browser.js",
   "files": [
     "dist/*",
     "!dist/node",
     "!dist/polyfill.js"
   ],
   "devDependencies": {
-    "@types/node": "^8.0.47",
     "raureif": "3.0.1",
-    "raureif-typescript": "3.0.0"
+    "raureif-babel": "0.1.0",
+    "raureif-browserify": "3.0.1",
+    "raureif-eslint": "3.0.1"
   }
 }

@@ -4,7 +4,7 @@ import glob from 'glob';
 
 global.chai = chai;
 
-const getPaths = () => glob.sync('dist/node/**/*-test.js');
+const getPaths = () => glob.sync('dist/tests/**/*-test.js');
 
 export default function run() {
   const testPaths = getPaths();
