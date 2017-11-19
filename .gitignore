@@ -1,2 +1,4 @@
 **/node_modules
 **/dist
+**/npm-debug.log
+integration-tests/**/yarn.lock

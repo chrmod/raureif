@@ -25,10 +25,28 @@ export const createBuildTree = (project) => {
   const sourcePlusAddonsTree = processAddons(sourceTree, project);
   const testsPlusAddonsTree = processAddons(testsTree, project);
 
-  const srcTree = new Funnel(new MergeTrees([
-    sourcePlusAddonsTree,
-    testsPlusAddonsTree,
-  ]));
+  // All tests should land `tests` folder of the build
+  // If plugins introduce nested `tests` folders, they will be flatten out
+  const unifiedTestsTree = new Funnel(
+    new MergeTrees([
+      // ignored nested `tests` folder
+      new Funnel(testsPlusAddonsTree, {
+        exclude: ['tests/**/*'],
+        allowEmpty: true,
+      }),
+      // flatten out nested `tests` folder
+      new Funnel(testsPlusAddonsTree, {
+        srcDir: 'tests',
+        allowEmpty: true,
+      }),
+    ]),
+    {
+      destDir: 'tests',
+      allowEmpty: true,
+    },
+  );
+
+  const srcTree = new MergeTrees([sourcePlusAddonsTree, unifiedTestsTree]);
 
   const addonPostBuildTrees = project.bundleAddons
     .map(addon => addon.postBuild(srcTree))
