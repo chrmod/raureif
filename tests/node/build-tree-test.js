@@ -1,7 +1,6 @@
-/* global it, describe, context */
 import { expect } from 'chai';
 import MergeTree from 'broccoli-merge-trees';
-import { createBuildTree } from '../build-tree';
+import { createBuildTree } from '../../build-tree';
 
 describe('Build Tree', function () {
   describe('createBuildTree', function () {

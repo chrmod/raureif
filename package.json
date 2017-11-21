@@ -1,6 +1,6 @@
 {
   "name": "raureif",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Basic toolset for library authoring",
   "repository": "https://github.com/chrmod/raureif",
   "author": "Krzysztof Jan Modras <chrmod@chrmod.net>",
@@ -32,10 +32,6 @@
     "cli-spinner": "^0.2.6",
     "commander": "^2.9.0",
     "copy-dereference": "^1.0.0",
-    "eslint-config-airbnb": "16.1.0",
-    "eslint-plugin-import": "2.8.0",
-    "eslint-plugin-jsx-a11y": "6.0.2",
-    "eslint-plugin-react": "7.4.0",
     "execa": "^0.6.3",
     "find-up": "^2.1.0",
     "glob": "^7.1.2",
@@ -47,6 +43,16 @@
     "testem": "1.18.0"
   },
   "devDependencies": {
-    "raureif": "1.4.2"
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-plugin-chai-expect": "^1.1.1",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-jsx-a11y": "6.0.2",
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-react": "7.4.0",
+    "eslint": "4.9.0",
+    "ajv": "5.0.0",
+    "raureif": "3.0.2",
+    "raureif-babel": "^0.1.0",
+    "raureif-eslint": "^0.1.0"
   }
 }
