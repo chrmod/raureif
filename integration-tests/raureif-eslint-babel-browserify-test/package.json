@@ -12,12 +12,12 @@
   "browser": "dist/index.browser.js",
   "files": [
     "dist/*",
-    "!dist/node",
-    "!dist/polyfill.js"
+    "!dist/tests"
   ],
   "devDependencies": {
+    "babel-preset-es2015": "6.24.1",
     "raureif": "3.0.1",
-    "raureif-babel": "0.1.0",
+    "raureif-babel": "3.0.1",
     "raureif-browserify": "3.0.1",
     "raureif-eslint": "3.0.1"
   }
